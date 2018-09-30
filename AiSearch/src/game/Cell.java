@@ -18,4 +18,9 @@ public class Cell
 		return (this.type == CellType.EMPTY)? "E" :
 			(this.type == CellType.DRAGONSTONE)? "D" : "W";
 	}
+	
+	public boolean equals(Cell other)
+	{
+		return x == other.x && y == other.y && type == other.type;
+	}
 }

@@ -1,18 +1,12 @@
 package game;
 
-import java.util.Arrays;
-
 public class Grid
 {
-	public int width;
-	public int height;
 	public Cell[][] map;
 	
 	public Grid(int height, int width)
 	{
-		this.height = height;
-		this.width = width;
-		map = new Cell[this.width][this.height];
+		map = new Cell[width][height];
 		genGrid();
 	}
 	
@@ -28,10 +22,11 @@ public class Grid
 				map[i][j] = new Cell(i, j, CellType.EMPTY);
 			}
 		}
+		
 		for(int k = 0; k < numWhiteWalkers; k++)
 		{
-			int newX = (int)(Math.random() * this.width);
-			int newY = (int)(Math.random() * this.height);
+			int newX = (int)(Math.random() * this.map[0].length);
+			int newY = (int)(Math.random() * this.map.length);
 			if(newX != 0 && newY != 0 && map[newX][newY].type == CellType.EMPTY)
 			{
 				map[newX][newY] = new Cell(newX, newY, CellType.WHITEWALKER);
@@ -46,9 +41,9 @@ public class Grid
 		
 		do
 		{
-			int newX = (int)(Math.random() * this.width);
-			int newY = (int)(Math.random() * this.height);
-			if(newX != this.width - 1 && newY != this.height - 1 && map[newX][newY].type == CellType.EMPTY)
+			int newX = (int)(Math.random() * this.map[0].length);
+			int newY = (int)(Math.random() * this.map.length);
+			if(newX != this.map[0].length - 1 && newY != this.map.length - 1 && map[newX][newY].type == CellType.EMPTY)
 			{
 				map[newX][newY] = new Cell(newX, newY, CellType.DRAGONSTONE);
 				noStone = false;
@@ -68,9 +63,40 @@ public class Grid
 		}
 	}
 	
+	public boolean isGoal()
+	{
+		for (int i = 0; i < map.length; i++)
+		{
+			for (int j = 0; j < map[i].length; j++)
+			{
+				if(map[i][j].type == CellType.WHITEWALKER)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean equals(Grid other)
+	{
+		for (int i = 0; i < map.length && i < other.map.length; i++)
+		{
+			for (int j = 0; j < map[i].length && i < other.map[i].length; j++)
+			{
+				if(!map[i][j].equals(other.map[i][j]))
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	public static void main(String[] args)
 	{
-		Grid g = new Grid(4, 4);
+		Grid g = new Grid(6, 4);
 		g.print();
+		System.out.println(g.map.length);
 	}
 }
