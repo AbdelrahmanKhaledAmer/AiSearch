@@ -2,14 +2,14 @@ package game;
 
 public class Cell
 {
-	public int x;
-	public int y;
+	public int c;
+	public int r;
 	public CellType type;
 	
-	public Cell(int x, int y, CellType type)
+	public Cell(int r, int c, CellType type)
 	{
-		this.x = x;
-		this.y = y;
+		this.c = c;
+		this.r = r;
 		this.type = type;
 	}
 	
@@ -21,6 +21,6 @@ public class Cell
 	
 	public boolean equals(Cell other)
 	{
-		return x == other.x && y == other.y && type == other.type;
+		return c == other.c && r == other.r && type == other.type;
 	}
 }

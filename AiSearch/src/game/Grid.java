@@ -4,9 +4,9 @@ public class Grid
 {
 	public Cell[][] map;
 	
-	public Grid(int height, int width)
-	{
-		map = new Cell[width][height];
+	public Grid(int rows, int cols)
+		{
+		map = new Cell[rows][cols];
 		genGrid();
 	}
 	
@@ -23,17 +23,15 @@ public class Grid
 			}
 		}
 		
-		for(int k = 0; k < numWhiteWalkers; k++)
+		int k = 0;
+		while(k < numWhiteWalkers)
 		{
-			int newX = (int)(Math.random() * this.map[0].length);
-			int newY = (int)(Math.random() * this.map.length);
-			if(newX != 0 && newY != 0 && map[newX][newY].type == CellType.EMPTY)
+			int newC = (int)(Math.random() * this.map[0].length);
+			int newR = (int)(Math.random() * this.map.length);
+			if(newC != 0 && newR != 0 && map[newR][newC].type == CellType.EMPTY)
 			{
-				map[newX][newY] = new Cell(newX, newY, CellType.WHITEWALKER);
-			}
-			else
-			{
-				k--;
+				map[newR][newC] = new Cell(newR, newC, CellType.WHITEWALKER);
+				k++;
 			}
 		}
 		
@@ -41,11 +39,11 @@ public class Grid
 		
 		do
 		{
-			int newX = (int)(Math.random() * this.map[0].length);
-			int newY = (int)(Math.random() * this.map.length);
-			if(newX != this.map[0].length - 1 && newY != this.map.length - 1 && map[newX][newY].type == CellType.EMPTY)
+			int newC = (int)(Math.random() * this.map[0].length);
+			int newR = (int)(Math.random() * this.map.length);
+			if(newC != this.map[0].length - 1 && newR != this.map.length - 1 && map[newR][newC].type == CellType.EMPTY)
 			{
-				map[newX][newY] = new Cell(newX, newY, CellType.DRAGONSTONE);
+				map[newR][newC] = new Cell(newR, newC, CellType.DRAGONSTONE);
 				noStone = false;
 			}
 		}while(noStone);
@@ -92,7 +90,11 @@ public class Grid
 		}
 		return true;
 	}
-	
+
+
+
+
+
 	public static void main(String[] args)
 	{
 		Grid g = new Grid(6, 4);
