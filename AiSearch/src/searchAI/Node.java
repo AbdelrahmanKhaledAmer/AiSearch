@@ -1,19 +1,30 @@
 package searchAI;
 
 import game.Grid;
+import java.util.ArrayList;
 
-public class State
+public class Node
 {
+	private final int MAX_SIZE = 1000000;
+	
+	private final int NORTH = 1;
+	private final int SOUTH = 2;
+	private final int EAST = 3;
+	private final int WEST = 4;
+	private final int PICK = 5;
+	private final int KILL = 6;
+	
 	public final int CMAX;
 	public final int RMAX;
 	
+	public Grid grid;
 	public int col;
 	public int row;
-	public int dragonglass;
-
-	public Grid grid;
+	public int dragonglass = 0;
 	
-	public State(Grid grid)
+	public ArrayList<Integer> sequenceOfActions = new ArrayList<Integer>(MAX_SIZE);
+	
+	public Node(Grid grid)
 	{	
 		this.grid = new Grid(grid);
 		this.RMAX = grid.map.length;
@@ -22,7 +33,7 @@ public class State
 		this.col = grid.map[0].length - 1;
 	}
 	
-	public State(State s)
+	public Node(Node s)
 	{
 		this.grid = new Grid(s.grid);
 		this.RMAX = s.RMAX;
@@ -30,6 +41,7 @@ public class State
 		this.col = s.col;
 		this.row = s.row;
 		this.dragonglass = s.dragonglass;
+		this.sequenceOfActions = (ArrayList<Integer>) s.sequenceOfActions.clone();
 	}
 	
 	public boolean isGoal()
@@ -37,7 +49,7 @@ public class State
 		return grid.isGoal();
 	}
 	
-	public boolean equals(State other)
+	public boolean equals(Node other)
 	{
 		return grid.equals(other.grid) && col == other.col &&
 				row == other.row && dragonglass == other.dragonglass;
@@ -51,37 +63,48 @@ public class State
 		System.out.println("***********************");
 	}
 	
-	public State kill()
+	public Node kill()
 	{
-		State s = new State(this);
+		Node s = new Node(this);
+		boolean killed = false;
 		if(s.row < s.RMAX - 1 && s.grid.isWhitewalker(s.row + 1, s.col))
 		{
 			s.grid.kill(s.row + 1, s.col);
+			killed = true;
 		}
 		
 		if(s.row > 0 && s.grid.isWhitewalker(s.row - 1, s.col))
 		{
 			s.grid.kill(s.row - 1, s.col);
+			killed = true;
 		}
 		
 		if(s.col < s.CMAX - 1 && s.grid.isWhitewalker(s.row, s.col + 1))
 		{
 			s.grid.kill(s.row, s.col + 1);
+			killed = true;
 		}
 		
 		if(s.col > 0 && s.grid.isWhitewalker(s.row, s.col - 1))
 		{
 			s.grid.kill(s.row, s.col - 1);
+			killed = true;
+		}
+		
+		if(killed)
+		{
+			s.sequenceOfActions.add(KILL);
 		}
 		
 		s.dragonglass--;
 		return s;
 	}
 	
-	public State pick(int dragonglass)
+	public Node pick(int dragonglass)
 	{
-		State s = new State(this);
+		Node s = new Node(this);
 		s.dragonglass = dragonglass;
+		s.sequenceOfActions.add(PICK);
 		return s;
 	}
 	
@@ -99,32 +122,43 @@ public class State
 		}
 	}
 	
-	public State north()
+	public Node north()
 	{
-		State s = new State(this);
+		Node s = new Node(this);
 		s.updatePosition(this.col, this.row - 1);
+		s.sequenceOfActions.add(NORTH);
 		return s;
 	}
 	
-	public State south()
+	public Node south()
 	{
-		State s = new State(this);
+		Node s = new Node(this);
 		s.updatePosition(this.col, this.row + 1);
+		s.sequenceOfActions.add(SOUTH);
 		return s;
 	}
 	
-	public State east()
+	public Node east()
 	{
-		State s = new State(this);
+		Node s = new Node(this);
 		s.updatePosition(this.col + 1, this.row);
+		s.sequenceOfActions.add(EAST);
 		return s;
 	}
 
-	public State west()
+	public Node west()
 	{
-		State s = new State(this);
+		Node s = new Node(this);
 		s.updatePosition(this.col - 1, this.row);
+		s.sequenceOfActions.add(WEST);
 		return s;
+	}
+	
+	public boolean isAncestor()
+	{
+		int idx = sequenceOfActions.size() - 1;
+		// TODO: STUFF
+		return false;
 	}
 	
 	public int heuristic1()
