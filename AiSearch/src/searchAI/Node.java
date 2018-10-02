@@ -163,9 +163,26 @@ public class Node implements Comparable<Node>
 	
 	public boolean isAncestor()
 	{
-		int idx = sequenceOfActions.size() - 1;
-		// TODO: STUFF
-		return false;
+		boolean reduced = false;
+		int[] counts = new int[5];
+		for(int i = sequenceOfActions.size() - 1; i >= 0; i--)
+		{
+			//Looking for these sequences only: ns, sn, ew, we, nesw, nwse, senw, swne
+			if(sequenceOfActions.get(i) < 5)
+			{
+				counts[sequenceOfActions.get(i)]++;
+			} else {
+				break;
+			}
+			if((counts[NORTH] == counts[SOUTH] && counts[EAST] == 0 && counts[WEST] == 0) // ns and sn
+			|| (counts[EAST] == counts[WEST] && counts[NORTH] == 0 && counts[SOUTH] == 0) // ew and we
+			|| (counts[NORTH] == counts[SOUTH] && counts[NORTH] == counts[EAST] && counts[NORTH] == counts[WEST])) // nesw, nwse, senw and swne
+			{
+				reduced = true;
+				break;
+			}
+		}
+		return reduced;
 	}
 	
 	public int heuristic1()
@@ -184,9 +201,7 @@ public class Node implements Comparable<Node>
 			// Get Manhattan distance to a whitewalker
 			// Multiply distance - 1 by movement cost
 			// Add kill cost
-		}
-		else
-		{
+		} else {
 			// Get Manhattan distance to a whitewalker
 			// Multiply distance - 1 by movement cost
 			// Add kill cost			

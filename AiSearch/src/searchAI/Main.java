@@ -1,7 +1,6 @@
 package searchAI;
 
 import game.Grid;
-import kotlin.jvm.internal.Lambda;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,12 +14,13 @@ public class Main
 	public static SearchQ q;
 	public static int numDragonglassPieces = (int)(1 + Math.random() * 2);
 
-	public static void generic_search(GenericSearchProblem problem, int SearchFunction ){ // SearchFunction number represents the search function to use
-
+	public static void generic_search(GenericSearchProblem problem, int SearchFunction )
+	{ // SearchFunction number represents the search function to use
 		Node s = new Node((Grid)problem); // initial state
 		q = new SearchQ(SearchFunction);
 		q.add(s);
-		while(true){
+		while(true)
+		{
 			if(q.isEmpty())
 			{
 				System.out.println("No solution");
@@ -41,7 +41,7 @@ public class Main
 
 	public static void BFS()
 	{	
-		Grid g = new Grid(3, 3);
+		Grid g = new Grid(4, 4);
 		g.print();
 
 		generic_search(g,2);
@@ -57,22 +57,22 @@ public class Main
 		else
 		{
 			Node s1 = s.north();
-			if(!s1.equals(s))
+			if(!s1.equals(s) && !s1.isAncestor())
 			{
 				q.add(s1);
 			}
 			Node s2 = s.south();
-			if(!s2.equals(s))
+			if(!s2.equals(s) && !s1.isAncestor())
 			{
 				q.add(s2);
 			}
 			Node s3 = s.east();
-			if(!s3.equals(s))
+			if(!s3.equals(s) && !s1.isAncestor())
 			{
 				q.add(s3);
 			}
 			Node s4 = s.west();
-			if(!s4.equals(s))
+			if(!s4.equals(s) && !s1.isAncestor())
 			{
 				q.add(s4);
 			}
@@ -96,7 +96,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		int count  = 0;
-		int max = 50;
+		int max = 10;
 		for(int i = 0; i < max; i++)
 		{
 			System.out.println("Trial#" + i);
