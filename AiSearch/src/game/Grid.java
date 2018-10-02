@@ -1,6 +1,8 @@
 package game;
 
-public class Grid
+import searchAI.GenericSearchProblem;
+
+public class Grid extends GenericSearchProblem
 {
 	private final int EMPTY = 0;
 	private final int DRAGONSTONE = 1;

@@ -1,6 +1,7 @@
 package searchAI;
 
 import game.Grid;
+import kotlin.jvm.internal.Lambda;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -11,34 +12,42 @@ public class Main
 	// MAKE A NODE DATA STRUCTURE WITH STATE, ACTION(SEQUENCE) AND COST(TOTAL)
 	// MAKE A FUNCTION THAT EXPANDS THE NODE
 	
-	public static Queue<Node> q = new LinkedList<Node>();
+	public static SearchQ q;
 	public static int numDragonglassPieces = (int)(1 + Math.random() * 2);
-	
-	public static void BFS()
-	{	
-		Grid g = new Grid(4, 4);
-		g.print();
-		
-		Node s = new Node(g);
+
+	public static void generic_search(GenericSearchProblem problem, int SearchFunction ){ // SearchFunction number represents the search function to use
+
+		Node s = new Node((Grid)problem); // initial state
+		q = new SearchQ(SearchFunction);
 		q.add(s);
-		do
-		{
+		while(true){
 			if(q.isEmpty())
 			{
 				System.out.println("No solution");
 				break;
 			}
-			
+
 			Node current = q.remove();
 			if(current.isGoal())
 			{
 				System.out.println("Goal found!");
+				System.out.println(q.size());
 				break;
 			}
 			addNextStates(current);
-		}while(true);
+		}
 	}
-	
+
+
+	public static void BFS()
+	{	
+		Grid g = new Grid(3, 3);
+		g.print();
+
+		generic_search(g,2);
+	}
+
+
 	public static void addNextStates(Node s)
 	{
 		if(s.grid.isWhitewalker(s.row, s.col))
@@ -93,7 +102,6 @@ public class Main
 			System.out.println("Trial#" + i);
 			try
 			{
-				q.clear();
 				BFS();
 			}
 			catch (OutOfMemoryError e)

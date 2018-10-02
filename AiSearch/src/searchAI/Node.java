@@ -3,7 +3,7 @@ package searchAI;
 import game.Grid;
 import java.util.ArrayList;
 
-public class Node
+public class Node implements Comparable<Node>
 {
 	private final int MAX_SIZE = 1000000;
 	
@@ -23,6 +23,7 @@ public class Node
 	public int dragonglass = 0;
 	
 	public ArrayList<Integer> sequenceOfActions = new ArrayList<Integer>(MAX_SIZE);
+	public int cost=0;
 	
 	public Node(Grid grid)
 	{	
@@ -42,6 +43,7 @@ public class Node
 		this.row = s.row;
 		this.dragonglass = s.dragonglass;
 		this.sequenceOfActions = (ArrayList<Integer>) s.sequenceOfActions.clone();
+		this.cost = s.cost;
 	}
 	
 	public boolean isGoal()
@@ -54,7 +56,12 @@ public class Node
 		return grid.equals(other.grid) && col == other.col &&
 				row == other.row && dragonglass == other.dragonglass;
 	}
-	
+
+	@Override
+	public int compareTo( Node o) {
+		return this.cost-o.cost;
+	}
+
 	public void print()
 	{
 		System.out.println("***********************");
@@ -107,7 +114,7 @@ public class Node
 		s.sequenceOfActions.add(PICK);
 		return s;
 	}
-	
+
 	private boolean isValid(int x, int y)
 	{
 		return !(x >= CMAX || y >= RMAX || x < 0 || y < 0);
