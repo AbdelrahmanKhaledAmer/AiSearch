@@ -2,36 +2,39 @@ package game;
 
 public class Grid
 {
-	public Cell[][] map;
+	private final int EMPTY = 0;
+	private final int DRAGONSTONE = 1;
+	private final int WHITEWALKER = 2;
+	
+	public int[][] map;
 	
 	public Grid(int rows, int cols)
 	{
-		map = new Cell[rows][cols];
+		map = new int[rows][cols];
 		genGrid();
 	}
 	
-	public Grid copy()
+	public Grid(Grid other)
 	{
-		Grid newGrid = new Grid(map.length, map[0].length);
+		map = new int[other.map.length][other.map[0].length];
 		for(int i = 0; i < map.length; i++)
 		{
 			for(int j = 0; j < map[i].length; j++)
 			{
-				newGrid.map[i][j] = new Cell(map[i][j].r, map[i][j].c, map[i][j].type);
+				map[i][j] = other.map[i][j];
 			}
 		}
-		return newGrid;
 	}
 	
 	public void genGrid()
 	{
-		int numWhiteWalkers = (int)(1 + Math.random() * Math.min(map.length, map[0].length));
+		int numWhiteWalkers = (int)(1 + Math.random() * (Math.min(map.length, map[0].length) - 1));
 		
 		for(int i = 0; i < map.length; i++)
 		{
 			for(int j = 0; j < map[i].length; j++)
 			{
-				map[i][j] = new Cell(i, j, CellType.EMPTY);
+				map[i][j] = EMPTY;
 			}
 		}
 		
@@ -40,9 +43,9 @@ public class Grid
 		{
 			int newC = (int)(Math.random() * this.map[0].length);
 			int newR = (int)(Math.random() * this.map.length);
-			if(newC != map[0].length - 1 && newR != map.length -1 && map[newR][newC].type == CellType.EMPTY)
+			if(newC != map[0].length - 1 && newR != map.length -1 && map[newR][newC] == EMPTY)
 			{
-				map[newR][newC] = new Cell(newR, newC, CellType.WHITEWALKER);
+				map[newR][newC] = WHITEWALKER;
 				k++;
 			}
 		}
@@ -53,9 +56,9 @@ public class Grid
 		{
 			int newC = (int)(Math.random() * this.map[0].length);
 			int newR = (int)(Math.random() * this.map.length);
-			if(newC != this.map[0].length - 1 && newR != this.map.length - 1 && map[newR][newC].type == CellType.EMPTY)
+			if(newC != this.map[0].length - 1 && newR != this.map.length - 1 && map[newR][newC] == EMPTY)
 			{
-				map[newR][newC] = new Cell(newR, newC, CellType.DRAGONSTONE);
+				map[newR][newC] = DRAGONSTONE;
 				noStone = false;
 			}
 		}while(noStone);
@@ -63,7 +66,7 @@ public class Grid
 	
 	public void kill(int row, int col)
 	{
-		this.map[row][col].type = CellType.EMPTY;
+		map[row][col] = EMPTY;
 	}
 	
 	public void print()
@@ -72,7 +75,7 @@ public class Grid
 		{
 			for (int j = 0; j < map[i].length; j++)
 			{
-				System.out.print("[" + map[i][j] + "]");
+				System.out.print("[" + ((map[i][j] == EMPTY)? " " : (map[i][j] == WHITEWALKER)? "W" : "D") + "]");
 			}
 			System.out.println("");
 		}
@@ -84,7 +87,7 @@ public class Grid
 		{
 			for (int j = 0; j < map[i].length; j++)
 			{
-				if(map[i][j].type == CellType.WHITEWALKER)
+				if(map[i][j] == WHITEWALKER)
 				{
 					return false;
 				}
@@ -99,7 +102,7 @@ public class Grid
 		{
 			for (int j = 0; j < map[i].length && i < other.map[i].length; j++)
 			{
-				if(!map[i][j].equals(other.map[i][j]))
+				if(map[i][j] != other.map[i][j])
 				{
 					return false;
 				}
@@ -107,19 +110,19 @@ public class Grid
 		}
 		return true;
 	}
-
-	public static void main(String[] args)
+	
+	public boolean isEmpty(int row, int col)
 	{
-		Grid g = new Grid(6, 4);
-		g.print();
-		System.out.println(g.isGoal());
-		for (int i = 0; i < g.map.length; i++) {
-			for (int j = 0; j < g.map[i].length; j++) {
-				g.kill(i, j);
-			}
-		}
-		g.print();
-		System.out.println(g.isGoal());
-		System.out.println(g.map.length);
+		return map[row][col] == EMPTY;
+	}
+	
+	public boolean isDragonstone(int row, int col)
+	{
+		return map[row][col] == DRAGONSTONE;
+	}
+	
+	public boolean isWhitewalker(int row, int col)
+	{
+		return map[row][col] == WHITEWALKER;
 	}
 }

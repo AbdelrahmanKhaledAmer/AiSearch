@@ -1,32 +1,30 @@
-package ai;
+package searchAI;
 
-import game.CellType;
 import game.Grid;
 
 public class State
 {
+	public final int CMAX;
+	public final int RMAX;
+	
 	public int col;
 	public int row;
 	public int dragonglass;
 
 	public Grid grid;
-
-	public final int CMAX;
-	public final int RMAX;
 	
 	public State(Grid grid)
 	{	
-		this.grid = grid.copy();
+		this.grid = new Grid(grid);
 		this.RMAX = grid.map.length;
 		this.CMAX = grid.map[0].length;
-		
 		this.row = grid.map.length - 1;
 		this.col = grid.map[0].length - 1;
 	}
 	
 	public State(State s)
 	{
-		this.grid = s.grid.copy();
+		this.grid = new Grid(s.grid);
 		this.RMAX = s.RMAX;
 		this.CMAX = s.CMAX;
 		this.col = s.col;
@@ -49,29 +47,29 @@ public class State
 	{
 		System.out.println("***********************");
 		this.grid.print();
-		System.out.println("(" + this.col + ", " + this.row + ")");
+		System.out.println("Jon: (" + this.col + ", " + this.row + ")");
 		System.out.println("***********************");
 	}
 	
 	public State kill()
 	{
 		State s = new State(this);
-		if(s.row < s.RMAX - 1 && s.grid.map[s.row + 1][s.col].type == CellType.WHITEWALKER)
+		if(s.row < s.RMAX - 1 && s.grid.isWhitewalker(s.row + 1, s.col))
 		{
 			s.grid.kill(s.row + 1, s.col);
 		}
 		
-		if(s.row > 0 && s.grid.map[s.row - 1][s.col].type == CellType.WHITEWALKER)
+		if(s.row > 0 && s.grid.isWhitewalker(s.row - 1, s.col))
 		{
 			s.grid.kill(s.row - 1, s.col);
 		}
 		
-		if(s.col < s.CMAX - 1 && s.grid.map[s.row][s.col + 1].type == CellType.WHITEWALKER)
+		if(s.col < s.CMAX - 1 && s.grid.isWhitewalker(s.row, s.col + 1))
 		{
 			s.grid.kill(s.row, s.col + 1);
 		}
 		
-		if(s.col > 0 && s.grid.map[s.row][s.col - 1].type == CellType.WHITEWALKER)
+		if(s.col > 0 && s.grid.isWhitewalker(s.row, s.col - 1))
 		{
 			s.grid.kill(s.row, s.col - 1);
 		}
@@ -127,5 +125,31 @@ public class State
 		State s = new State(this);
 		s.updatePosition(this.col - 1, this.row);
 		return s;
+	}
+	
+	public int heuristic1()
+	{
+		if(this.isGoal())
+		{
+			return 0;
+		}
+		
+		int possibleCost = 0;
+		if(this.dragonglass == 0)
+		{
+			// Get Manhattan Distance to dragonstone
+			// Multiply distance - 1 by movement cost
+			// Add dragonstone cost
+			// Get Manhattan distance to a whitewalker
+			// Multiply distance - 1 by movement cost
+			// Add kill cost
+		}
+		else
+		{
+			// Get Manhattan distance to a whitewalker
+			// Multiply distance - 1 by movement cost
+			// Add kill cost			
+		}
+		return possibleCost;
 	}
 }
