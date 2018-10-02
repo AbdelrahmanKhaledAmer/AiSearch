@@ -107,10 +107,10 @@ public class Node implements Comparable<Node>
 		return s;
 	}
 	
-	public Node pick(int dragonglass)
+	public Node pick()
 	{
 		Node s = new Node(this);
-		s.dragonglass = dragonglass;
+		s.dragonglass = grid.numDragonglassPieces;
 		s.sequenceOfActions.add(PICK);
 		return s;
 	}
@@ -183,6 +183,52 @@ public class Node implements Comparable<Node>
 			}
 		}
 		return reduced;
+	}
+
+	public  SearchQ expandNode(SearchQ q)
+	{
+		if(this.grid.isWhitewalker(this.row, this.col))
+		{
+			return q;
+		}
+		else
+		{
+			Node s1 = this.north();
+			if(!s1.equals(this) && !s1.isAncestor())
+			{
+				q.add(s1);
+			}
+			Node s2 = this.south();
+			if(!s2.equals(this) && !s2.isAncestor())
+			{
+				q.add(s2);
+			}
+			Node s3 = this.east();
+			if(!s3.equals(this) && !s3.isAncestor())
+			{
+				q.add(s3);
+			}
+			Node s4 = this.west();
+			if(!s4.equals(this) && !s4.isAncestor())
+			{
+				q.add(s4);
+			}
+			if(this.grid.isDragonstone(this.row, this.col))
+			{
+				Node s5 = this.pick();
+				q.add(s5);
+			}
+			if(((this.row < this.RMAX - 1 && this.grid.isWhitewalker(this.row + 1, this.col))
+					|| (this.row > 0 && this.grid.isWhitewalker(this.row - 1, this.col))
+					|| (this.col < this.CMAX - 1 && this.grid.isWhitewalker(this.row, this.col + 1))
+					|| (this.col > 0 && this.grid.isWhitewalker(this.row, this.col - 1)))
+					&& this.dragonglass > 0)
+			{
+				Node s6 = this.kill();
+				q.add(s6);
+			}
+		}
+		return q;
 	}
 	
 	public int heuristic1()

@@ -9,7 +9,7 @@ public class Grid extends GenericSearchProblem
 	private final int WHITEWALKER = 2;
 	
 	public int[][] map;
-	
+	public  int numDragonglassPieces;
 	public Grid(int rows, int cols)
 	{
 		map = new int[rows][cols];
@@ -17,7 +17,9 @@ public class Grid extends GenericSearchProblem
 	}
 	
 	public Grid(Grid other)
-	{
+	{	// another constructor for copying the grid
+		//remember the old num of dragon glass pieces
+		numDragonglassPieces = other.numDragonglassPieces;
 		map = new int[other.map.length][other.map[0].length];
 		for(int i = 0; i < map.length; i++)
 		{
@@ -31,7 +33,7 @@ public class Grid extends GenericSearchProblem
 	public void genGrid()
 	{
 		int numWhiteWalkers = (int)(1 + Math.random() * (Math.min(map.length, map[0].length) - 1));
-		
+		numDragonglassPieces = (int)(1 + Math.random() * 2);
 		for(int i = 0; i < map.length; i++)
 		{
 			for(int j = 0; j < map[i].length; j++)
