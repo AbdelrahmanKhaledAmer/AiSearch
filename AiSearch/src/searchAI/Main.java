@@ -40,16 +40,19 @@ public class Main
 		generic_search(problem,2);
 	}
 
-	public static void Greedy(GenericSearchProblem problem)
+	public static void UCS(GenericSearchProblem problem)
 	{
-		//TODO put proper cost and heuristic func
 		generic_search(problem,3);
 	}
 
-	public void AStar(GenericSearchProblem problem)
+	public static void Greedy(GenericSearchProblem problem)
 	{
-		//TODO put proper cost and heuristic func
 		generic_search(problem,4);
+	}
+
+	public static void AStar(GenericSearchProblem problem)
+	{
+		generic_search(problem,5);
 	}
 
 
@@ -66,7 +69,14 @@ public class Main
 			{
 				Grid g = new Grid(4, 4);
 				g.print();
+				System.out.print("BFS: ");
 				BFS(g);
+				System.out.print("UCS: ");
+				UCS(g);
+				System.out.print("Greedy: ");
+				Greedy(g);
+				System.out.print("Astar: ");
+				AStar(g);
 			}
 			catch (OutOfMemoryError e)
 			{

@@ -1,60 +1,91 @@
 package searchAI;
 
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class SearchQ {
     Stack<Node> s;
     Queue<Node> q;
     PriorityQueue<Node> pq;
     int which =-1; // 1, stack 2 queue, 3 pq
-    private final int STACK = 1;
-    private final int QUEUE =2;
-    private final int PRIORITYQUEUE = 3;
+    private final int DFS = 1;  // valid for ID and DFS
+    private final int BFS =2;
+    private final int UCS = 3;
+    private final int GREEDY = 4;
+    private final int ASTAR = 5;
+
+
     public SearchQ(int n){
         which = n;
+
+        Comparator<Node> OrderByCost =  new Comparator<Node>() {
+            public int compare(Node s1, Node e2) {
+                return s1.cost - e2.cost;
+            }
+        };
+
+        Comparator<Node> OrderByHeuristic =  new Comparator<Node>() {
+            public int compare(Node s1, Node e2) {
+                return s1.heuristic1() - e2.heuristic1();
+            }
+        };
+
+        Comparator<Node> AStarOrder =  new Comparator<Node>() {
+            public int compare(Node s1, Node e2) {
+                return s1.heuristic1()+s1.cost - e2.heuristic1()-e2.cost;
+            }
+        };
+
+
         switch (which) {
-            case STACK:
+            case DFS:
                 s = new Stack<Node>(); break;
-            case QUEUE:
+            case BFS:
                 q = new LinkedList<Node>(); break;
-            case PRIORITYQUEUE:
-                pq = new PriorityQueue<Node>(); break;
+            case UCS:
+                pq = new PriorityQueue<Node>(OrderByCost); break;
+            case GREEDY:
+                pq = new PriorityQueue<Node>(OrderByHeuristic); break;
+            case ASTAR:
+                pq = new PriorityQueue<Node>(AStarOrder); break;
         }
 
     }
 
     public void add(Node e){
         switch (which) {
-            case STACK:
+            case DFS:
                 s.add(e); break;
-            case QUEUE:
+            case BFS:
                 q.add(e); break;
-            case PRIORITYQUEUE:
+            case UCS:
+            case GREEDY:
+            case ASTAR:
                 pq.add(e); break;
         }
 
     }
     public Node remove(){
         switch (which) {
-            case STACK:
+            case DFS:
                 return s.pop();
-            case QUEUE:
+            case BFS:
                 return q.remove();
-            case PRIORITYQUEUE:
+            case UCS:
+            case GREEDY:
+            case ASTAR:
                 return pq.remove();
         }
         return null;
     }
     public boolean isEmpty(){
         switch (which) {
-            case STACK:
+            case DFS:
                 return s.isEmpty();
-            case QUEUE:
+            case BFS:
                 return q.isEmpty();
-            case PRIORITYQUEUE:
+            case UCS:
+            case GREEDY:
+            case ASTAR:
                 return pq.isEmpty();
 
         }
@@ -63,11 +94,13 @@ public class SearchQ {
 
     public int size(){
         switch (which) {
-            case STACK:
+            case DFS:
                 return s.size();
-            case QUEUE:
+            case BFS:
                 return q.size();
-            case PRIORITYQUEUE:
+            case UCS:
+            case GREEDY:
+            case ASTAR:
                 return pq.size();
 
         }

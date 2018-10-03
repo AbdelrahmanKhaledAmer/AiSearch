@@ -306,11 +306,11 @@ public class Node implements Comparable<Node>
 			}
 			// Multiply dragonstoneDistance - 1 by movement cost
 			possibleCost += (dragonstoneDistance - 1) * X_TO_E;
-			System.out.println(possibleCost);
+//			System.out.println(possibleCost);
 			// Add dragonstone cost
 			possibleCost += E_TO_D_NO_DG;
 			possibleCost += D_PICK;
-			System.out.println(possibleCost);
+//			System.out.println(possibleCost);
 			// Get Manhattan distance to a whitewalker
 			for (int r = 0; r < grid.map.length; r++)
 			{
@@ -327,10 +327,10 @@ public class Node implements Comparable<Node>
 			}
 			// Multiply whitewalkerDistance - 1 by movement cost
 			possibleCost += (whitewalkerDistance - 1) * X_TO_E;
-			System.out.println(possibleCost);
+//			System.out.println(possibleCost);
 			// Add kill cost
 			possibleCost += KILL3;
-			System.out.println(possibleCost);
+//			System.out.println(possibleCost);
 		} else {
 			// Get Manhattan distance to a whitewalker
 			for (int r = 0; r < grid.map.length; r++)
