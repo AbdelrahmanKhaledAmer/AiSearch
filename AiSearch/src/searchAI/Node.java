@@ -3,7 +3,7 @@ package searchAI;
 import game.Grid;
 import java.util.ArrayList;
 
-public class Node implements Comparable<Node>
+public class Node
 {
 	private static final int MAX_SIZE = 1000000;
 	
@@ -68,12 +68,6 @@ public class Node implements Comparable<Node>
 	{
 		return grid.equals(other.grid) && col == other.col &&
 				row == other.row && dragonglass == other.dragonglass;
-	}
-
-	@Override
-	public int compareTo( Node o)
-	{
-		return this.cost - o.cost;
 	}
 
 	public void print()
