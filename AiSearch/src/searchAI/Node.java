@@ -5,14 +5,27 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node>
 {
-	private final int MAX_SIZE = 1000000;
+	private static final int MAX_SIZE = 1000000;
 	
-	private final int NORTH = 1;
-	private final int SOUTH = 2;
-	private final int EAST = 3;
-	private final int WEST = 4;
-	private final int PICK = 5;
-	private final int KILL = 6;
+	private static final int NORTH = 1;
+	private static final int SOUTH = 2;
+	private static final int EAST  = 3;
+	private static final int WEST  = 4;
+	private static final int PICK  = 5;
+	private static final int KILL  = 6;
+	
+	// Movement Costs
+	private static final int X_TO_W       = 64;
+	private static final int X_TO_E       = 16;
+	private static final int E_TO_D_NO_DG = 8;
+	
+	// Picking up Dragonglass cost
+	private static final int D_PICK = 4;
+	
+	// Killing Whitewalkers cost
+	private static final int KILL1 = 4;
+	private static final int KILL2 = 2;
+	private static final int KILL3 = 1;
 	
 	public final int CMAX;
 	public final int RMAX;
@@ -58,8 +71,9 @@ public class Node implements Comparable<Node>
 	}
 
 	@Override
-	public int compareTo( Node o) {
-		return this.cost-o.cost;
+	public int compareTo( Node o)
+	{
+		return this.cost - o.cost;
 	}
 
 	public void print()
@@ -73,34 +87,51 @@ public class Node implements Comparable<Node>
 	public Node kill()
 	{
 		Node s = new Node(this);
+		int num = 0;
 		boolean killed = false;
 		if(s.row < s.RMAX - 1 && s.grid.isWhitewalker(s.row + 1, s.col))
 		{
 			s.grid.kill(s.row + 1, s.col);
 			killed = true;
+			num++;
 		}
 		
 		if(s.row > 0 && s.grid.isWhitewalker(s.row - 1, s.col))
 		{
 			s.grid.kill(s.row - 1, s.col);
 			killed = true;
+			num++;
 		}
 		
 		if(s.col < s.CMAX - 1 && s.grid.isWhitewalker(s.row, s.col + 1))
 		{
 			s.grid.kill(s.row, s.col + 1);
 			killed = true;
+			num++;
 		}
 		
 		if(s.col > 0 && s.grid.isWhitewalker(s.row, s.col - 1))
 		{
 			s.grid.kill(s.row, s.col - 1);
 			killed = true;
+			num++;
 		}
 		
 		if(killed)
 		{
 			s.sequenceOfActions.add(KILL);
+			switch(num)
+			{
+			case 1:
+				s.cost += KILL1;
+				break;
+			case 2:
+				s.cost += KILL2;
+				break;
+			case 3:
+				s.cost += KILL3;
+				break;
+			}
 		}
 		
 		s.dragonglass--;
@@ -112,6 +143,7 @@ public class Node implements Comparable<Node>
 		Node s = new Node(this);
 		s.dragonglass = grid.numDragonglassPieces;
 		s.sequenceOfActions.add(PICK);
+		s.cost += D_PICK;
 		return s;
 	}
 
@@ -124,9 +156,23 @@ public class Node implements Comparable<Node>
 	{
 		if(isValid(x , y))
 		{
+			this.cost += getMovementCost(x, y);
 			this.col = x;
 			this.row = y;
 		}
+	}
+	
+	public int getMovementCost(int col, int row)
+	{
+		if(this.grid.isWhitewalker(row, col))
+		{
+			return X_TO_W;
+		}
+		if(dragonglass == 0 && this.grid.isDragonstone(row, col))
+		{
+			return E_TO_D_NO_DG;						
+		}
+		return X_TO_E;
 	}
 	
 	public Node north()
@@ -185,7 +231,7 @@ public class Node implements Comparable<Node>
 		return reduced;
 	}
 
-	public  SearchQ expandNode(SearchQ q)
+	public SearchQ expandNode(SearchQ q)
 	{
 		if(this.grid.isWhitewalker(this.row, this.col))
 		{
@@ -213,7 +259,7 @@ public class Node implements Comparable<Node>
 			{
 				q.add(s4);
 			}
-			if(this.grid.isDragonstone(this.row, this.col))
+			if(this.dragonglass == 0 && this.grid.isDragonstone(this.row, this.col))
 			{
 				Node s5 = this.pick();
 				q.add(s5);
@@ -237,20 +283,73 @@ public class Node implements Comparable<Node>
 		{
 			return 0;
 		}
-		
 		int possibleCost = 0;
+		int whitewalkerDistance = CMAX + RMAX + 1;
 		if(this.dragonglass == 0)
 		{
+			int dRow = 0;
+			int dCol = 0;
+			int dragonstoneDistance = 0;
 			// Get Manhattan Distance to dragonstone
-			// Multiply distance - 1 by movement cost
+			for (int r = 0; r < grid.map.length; r++)
+			{
+				for (int c = 0; c < grid.map[r].length; c++)
+				{
+					if(grid.isDragonstone(r, c))
+					{
+						dragonstoneDistance = Math.abs(r - row) + Math.abs(c - col);
+						dRow = r;
+						dCol = c;
+						break;
+					}
+				}
+			}
+			// Multiply dragonstoneDistance - 1 by movement cost
+			possibleCost += (dragonstoneDistance - 1) * X_TO_E;
+			System.out.println(possibleCost);
 			// Add dragonstone cost
+			possibleCost += E_TO_D_NO_DG;
+			possibleCost += D_PICK;
+			System.out.println(possibleCost);
 			// Get Manhattan distance to a whitewalker
-			// Multiply distance - 1 by movement cost
+			for (int r = 0; r < grid.map.length; r++)
+			{
+				for (int c = 0; c < grid.map[r].length; c++)
+				{
+					if(grid.isWhitewalker(r, c)) {
+						int d = Math.abs(r - dRow) + Math.abs(c - dCol);
+						if(whitewalkerDistance > d)
+						{
+							whitewalkerDistance = d;
+						}
+					}
+				}
+			}
+			// Multiply whitewalkerDistance - 1 by movement cost
+			possibleCost += (whitewalkerDistance - 1) * X_TO_E;
+			System.out.println(possibleCost);
 			// Add kill cost
+			possibleCost += KILL3;
+			System.out.println(possibleCost);
 		} else {
 			// Get Manhattan distance to a whitewalker
-			// Multiply distance - 1 by movement cost
+			for (int r = 0; r < grid.map.length; r++)
+			{
+				for (int c = 0; c < grid.map[r].length; c++)
+				{
+					if(grid.isWhitewalker(r, c)) {
+						int d = Math.abs(r - row) + Math.abs(c - col);
+						if(whitewalkerDistance > d)
+						{
+							whitewalkerDistance = d;
+						}
+					}
+				}
+			}
+			// Multiply whitewalkerDistance - 1 by movement cost
+			possibleCost += (whitewalkerDistance - 1) * X_TO_E;
 			// Add kill cost			
+			possibleCost += KILL3;
 		}
 		return possibleCost;
 	}

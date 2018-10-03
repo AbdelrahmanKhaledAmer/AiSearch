@@ -4,10 +4,6 @@ import game.Grid;
 
 public class Main
 {
-	// MAKE A GENERAL SEARCH AS IN THE LECTURE
-	// MAKE A NODE DATA STRUCTURE WITH STATE, ACTION(SEQUENCE) AND COST(TOTAL)
-	// MAKE A FUNCTION THAT EXPANDS THE NODE
-
 	public static void generic_search(GenericSearchProblem problem, int SearchFunction )
 	{ // SearchFunction number represents the search function to use
 		Node s = new Node((Grid)problem); // initial state
@@ -28,7 +24,7 @@ public class Main
 				System.out.println(q.size());
 				break;
 			}
-			 q = current.expandNode(q);
+			q = current.expandNode(q);
 		}
 	}
 
