@@ -37,6 +37,7 @@ public class Node
 	
 	public ArrayList<Integer> sequenceOfActions = new ArrayList<Integer>(MAX_SIZE);
 	public int cost=0;
+	public static int nodeCount = 0;
 	
 	public Node(Grid grid)
 	{	
@@ -237,26 +238,31 @@ public class Node
 			if(!s1.equals(this) && !s1.isAncestor())
 			{
 				q.add(s1);
+				nodeCount++;
 			}
 			Node s2 = this.south();
 			if(!s2.equals(this) && !s2.isAncestor())
 			{
 				q.add(s2);
+				nodeCount++;
 			}
 			Node s3 = this.east();
 			if(!s3.equals(this) && !s3.isAncestor())
 			{
 				q.add(s3);
+				nodeCount++;
 			}
 			Node s4 = this.west();
 			if(!s4.equals(this) && !s4.isAncestor())
 			{
 				q.add(s4);
+				nodeCount++;
 			}
 			if(this.dragonglass == 0 && this.grid.isDragonstone(this.row, this.col))
 			{
 				Node s5 = this.pick();
 				q.add(s5);
+				nodeCount++;
 			}
 			if(((this.row < this.RMAX - 1 && this.grid.isWhitewalker(this.row + 1, this.col))
 					|| (this.row > 0 && this.grid.isWhitewalker(this.row - 1, this.col))
@@ -266,6 +272,7 @@ public class Node
 			{
 				Node s6 = this.kill();
 				q.add(s6);
+				nodeCount++;
 			}
 		}
 		return q;
@@ -342,7 +349,7 @@ public class Node
 			}
 			// Multiply whitewalkerDistance - 1 by movement cost
 			possibleCost += (whitewalkerDistance - 1) * X_TO_E;
-			// Add kill cost			
+			// Add kill cost
 			possibleCost += KILL3;
 		}
 		return possibleCost;
