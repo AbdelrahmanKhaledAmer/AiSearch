@@ -1,6 +1,7 @@
 package searchAI;
 
-import game.Grid;
+import game.SaveWesteros;
+
 import java.util.ArrayList;
 
 public class Node
@@ -30,7 +31,7 @@ public class Node
 	public final int CMAX;
 	public final int RMAX;
 	
-	public Grid grid;
+	public SaveWesteros saveWesteros;
 	public int col;
 	public int row;
 	public int dragonglass = 0;
@@ -39,9 +40,9 @@ public class Node
 	public int cost=0;
 	public static int nodeCount = 0;
 	
-	public Node(Grid grid)
+	public Node(SaveWesteros grid)
 	{	
-		this.grid = new Grid(grid);
+		this.saveWesteros = new SaveWesteros(grid);
 		this.RMAX = grid.map.length;
 		this.CMAX = grid.map[0].length;
 		this.row = grid.map.length - 1;
@@ -50,7 +51,7 @@ public class Node
 	
 	public Node(Node s)
 	{
-		this.grid = new Grid(s.grid);
+		this.saveWesteros = new SaveWesteros(s.saveWesteros);
 		this.RMAX = s.RMAX;
 		this.CMAX = s.CMAX;
 		this.col = s.col;
@@ -62,19 +63,19 @@ public class Node
 	
 	public boolean isGoal()
 	{
-		return grid.isGoal();
+		return saveWesteros.isGoal();
 	}
 	
 	public boolean equals(Node other)
 	{
-		return grid.equals(other.grid) && col == other.col &&
+		return saveWesteros.equals(other.saveWesteros) && col == other.col &&
 				row == other.row && dragonglass == other.dragonglass;
 	}
 
 	public void print()
 	{
 		System.out.println("***********************");
-		this.grid.print();
+		this.saveWesteros.print();
 		System.out.println("Jon: (" + this.col + ", " + this.row + ")");
 		System.out.println("***********************");
 	}
@@ -84,30 +85,30 @@ public class Node
 		Node s = new Node(this);
 		int num = 0;
 		boolean killed = false;
-		if(s.row < s.RMAX - 1 && s.grid.isWhitewalker(s.row + 1, s.col))
+		if(s.row < s.RMAX - 1 && s.saveWesteros.isWhitewalker(s.row + 1, s.col))
 		{
-			s.grid.kill(s.row + 1, s.col);
+			s.saveWesteros.kill(s.row + 1, s.col);
 			killed = true;
 			num++;
 		}
 		
-		if(s.row > 0 && s.grid.isWhitewalker(s.row - 1, s.col))
+		if(s.row > 0 && s.saveWesteros.isWhitewalker(s.row - 1, s.col))
 		{
-			s.grid.kill(s.row - 1, s.col);
+			s.saveWesteros.kill(s.row - 1, s.col);
 			killed = true;
 			num++;
 		}
 		
-		if(s.col < s.CMAX - 1 && s.grid.isWhitewalker(s.row, s.col + 1))
+		if(s.col < s.CMAX - 1 && s.saveWesteros.isWhitewalker(s.row, s.col + 1))
 		{
-			s.grid.kill(s.row, s.col + 1);
+			s.saveWesteros.kill(s.row, s.col + 1);
 			killed = true;
 			num++;
 		}
 		
-		if(s.col > 0 && s.grid.isWhitewalker(s.row, s.col - 1))
+		if(s.col > 0 && s.saveWesteros.isWhitewalker(s.row, s.col - 1))
 		{
-			s.grid.kill(s.row, s.col - 1);
+			s.saveWesteros.kill(s.row, s.col - 1);
 			killed = true;
 			num++;
 		}
@@ -136,7 +137,7 @@ public class Node
 	public Node pick()
 	{
 		Node s = new Node(this);
-		s.dragonglass = grid.numDragonglassPieces;
+		s.dragonglass = saveWesteros.numDragonglassPieces;
 		s.sequenceOfActions.add(PICK);
 		s.cost += D_PICK;
 		return s;
@@ -159,11 +160,11 @@ public class Node
 	
 	public int getMovementCost(int col, int row)
 	{
-		if(this.grid.isWhitewalker(row, col))
+		if(this.saveWesteros.isWhitewalker(row, col))
 		{
 			return X_TO_W;
 		}
-		if(dragonglass == 0 && this.grid.isDragonstone(row, col))
+		if(dragonglass == 0 && this.saveWesteros.isDragonstone(row, col))
 		{
 			return E_TO_D_NO_DG;						
 		}
@@ -217,7 +218,7 @@ public class Node
 			}
 			if((counts[NORTH] == counts[SOUTH] && counts[EAST] == 0 && counts[WEST] == 0) // ns and sn
 			|| (counts[EAST] == counts[WEST] && counts[NORTH] == 0 && counts[SOUTH] == 0) // ew and we
-			|| (counts[NORTH] == counts[SOUTH] && counts[NORTH] == counts[EAST] && counts[NORTH] == counts[WEST])) // nesw, nwse, senw and swne
+			|| (counts[NORTH] == counts[SOUTH] && counts[EAST] == counts [WEST]))
 			{
 				reduced = true;
 				break;
@@ -228,7 +229,7 @@ public class Node
 
 	public SearchQ expandNode(SearchQ q)
 	{
-		if(this.grid.isWhitewalker(this.row, this.col))
+		if(this.saveWesteros.isWhitewalker(this.row, this.col))
 		{
 			return q;
 		}
@@ -258,16 +259,16 @@ public class Node
 				q.add(s4);
 				nodeCount++;
 			}
-			if(this.dragonglass == 0 && this.grid.isDragonstone(this.row, this.col))
+			if(this.dragonglass == 0 && this.saveWesteros.isDragonstone(this.row, this.col))
 			{
 				Node s5 = this.pick();
 				q.add(s5);
 				nodeCount++;
 			}
-			if(((this.row < this.RMAX - 1 && this.grid.isWhitewalker(this.row + 1, this.col))
-					|| (this.row > 0 && this.grid.isWhitewalker(this.row - 1, this.col))
-					|| (this.col < this.CMAX - 1 && this.grid.isWhitewalker(this.row, this.col + 1))
-					|| (this.col > 0 && this.grid.isWhitewalker(this.row, this.col - 1)))
+			if(((this.row < this.RMAX - 1 && this.saveWesteros.isWhitewalker(this.row + 1, this.col))
+					|| (this.row > 0 && this.saveWesteros.isWhitewalker(this.row - 1, this.col))
+					|| (this.col < this.CMAX - 1 && this.saveWesteros.isWhitewalker(this.row, this.col + 1))
+					|| (this.col > 0 && this.saveWesteros.isWhitewalker(this.row, this.col - 1)))
 					&& this.dragonglass > 0)
 			{
 				Node s6 = this.kill();
@@ -292,11 +293,11 @@ public class Node
 			int dCol = 0;
 			int dragonstoneDistance = 0;
 			// Get Manhattan Distance to dragonstone
-			for (int r = 0; r < grid.map.length; r++)
+			for (int r = 0; r < saveWesteros.map.length; r++)
 			{
-				for (int c = 0; c < grid.map[r].length; c++)
+				for (int c = 0; c < saveWesteros.map[r].length; c++)
 				{
-					if(grid.isDragonstone(r, c))
+					if(saveWesteros.isDragonstone(r, c))
 					{
 						dragonstoneDistance = Math.abs(r - row) + Math.abs(c - col);
 						dRow = r;
@@ -313,11 +314,11 @@ public class Node
 			possibleCost += D_PICK;
 //			System.out.println(possibleCost);
 			// Get Manhattan distance to a whitewalker
-			for (int r = 0; r < grid.map.length; r++)
+			for (int r = 0; r < saveWesteros.map.length; r++)
 			{
-				for (int c = 0; c < grid.map[r].length; c++)
+				for (int c = 0; c < saveWesteros.map[r].length; c++)
 				{
-					if(grid.isWhitewalker(r, c)) {
+					if(saveWesteros.isWhitewalker(r, c)) {
 						int d = Math.abs(r - dRow) + Math.abs(c - dCol);
 						if(whitewalkerDistance > d)
 						{
@@ -334,11 +335,11 @@ public class Node
 //			System.out.println(possibleCost);
 		} else {
 			// Get Manhattan distance to a whitewalker
-			for (int r = 0; r < grid.map.length; r++)
+			for (int r = 0; r < saveWesteros.map.length; r++)
 			{
-				for (int c = 0; c < grid.map[r].length; c++)
+				for (int c = 0; c < saveWesteros.map[r].length; c++)
 				{
-					if(grid.isWhitewalker(r, c)) {
+					if(saveWesteros.isWhitewalker(r, c)) {
 						int d = Math.abs(r - row) + Math.abs(c - col);
 						if(whitewalkerDistance > d)
 						{
