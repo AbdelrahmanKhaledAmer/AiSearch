@@ -32,7 +32,6 @@ public class Main {
 
 
     public static void DFS(GenericSearchProblem problem) {
-        //TODO test with a special saveWesteros
         generic_search(problem, 1);
     }
 

@@ -7,14 +7,18 @@ import java.util.ArrayList;
 public class Node
 {
 	private static final int MAX_SIZE = 1000000;
-	
+
+
+	// action list available (operators)
 	private static final int NORTH = 1;
 	private static final int SOUTH = 2;
 	private static final int EAST  = 3;
 	private static final int WEST  = 4;
 	private static final int PICK  = 5;
 	private static final int KILL  = 6;
-	
+
+	//costs
+
 	// Movement Costs
 	private static final int X_TO_W       = 64;
 	private static final int X_TO_E       = 16;
@@ -30,6 +34,9 @@ public class Node
 	
 	public final int CMAX;
 	public final int RMAX;
+
+
+	//state
 	
 	public SaveWesteros saveWesteros;
 	public int col;
@@ -38,8 +45,7 @@ public class Node
 	
 	public ArrayList<Integer> sequenceOfActions = new ArrayList<Integer>(MAX_SIZE);
 	public int cost=0;
-	public static int nodeCount = 0;
-	
+
 	public Node(SaveWesteros grid)
 	{	
 		this.saveWesteros = new SaveWesteros(grid);
@@ -239,31 +245,26 @@ public class Node
 			if(!s1.equals(this) && !s1.isAncestor())
 			{
 				q.add(s1);
-				nodeCount++;
 			}
 			Node s2 = this.south();
 			if(!s2.equals(this) && !s2.isAncestor())
 			{
 				q.add(s2);
-				nodeCount++;
 			}
 			Node s3 = this.east();
 			if(!s3.equals(this) && !s3.isAncestor())
 			{
 				q.add(s3);
-				nodeCount++;
 			}
 			Node s4 = this.west();
 			if(!s4.equals(this) && !s4.isAncestor())
 			{
 				q.add(s4);
-				nodeCount++;
 			}
 			if(this.dragonglass == 0 && this.saveWesteros.isDragonstone(this.row, this.col))
 			{
 				Node s5 = this.pick();
 				q.add(s5);
-				nodeCount++;
 			}
 			if(((this.row < this.RMAX - 1 && this.saveWesteros.isWhitewalker(this.row + 1, this.col))
 					|| (this.row > 0 && this.saveWesteros.isWhitewalker(this.row - 1, this.col))
@@ -273,7 +274,6 @@ public class Node
 			{
 				Node s6 = this.kill();
 				q.add(s6);
-				nodeCount++;
 			}
 		}
 		return q;
