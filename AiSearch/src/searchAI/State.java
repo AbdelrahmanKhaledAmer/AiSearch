@@ -1,5 +1,9 @@
 package searchAI;
 
-public abstract class State  {
-
+public class State
+{
+	public void print()
+	{
+		System.out.println("Generic State");
+	}
 }

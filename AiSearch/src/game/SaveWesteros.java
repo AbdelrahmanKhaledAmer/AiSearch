@@ -1,110 +1,56 @@
 package game;
 
 import searchAI.GenericSearchProblem;
+import searchAI.State;
 
-public class SaveWesteros extends GenericSearchProblem {
-    private final int EMPTY = 0;
-    private final int DRAGONSTONE = 1;
-    private final int WHITEWALKER = 2;
-
-    public int[][] map;
-    public int numDragonglassPieces;
-
-    SaveWesterosState initialState;
-
-
-    public SaveWesteros(int rows, int cols) {
-        map = new int[rows][cols];
-        genGrid();
+public class SaveWesteros extends GenericSearchProblem
+{	
+	public int numDragonglassPieces;
+	public int numWhitewalkers;
+	
+	public SaveWesteros()
+	{
+		
+	}
+	
+    public SaveWesteros(int rows, int cols)
+    {
+    	genGrid(rows, cols);
     }
 
-
-    public SaveWesteros(SaveWesteros other) {    // another constructor for copying the saveWesteros
-        //remember the old num of dragon glass pieces
+    public SaveWesteros(SaveWesteros other)
+    {   // another constructor for copying the saveWesteros
+    	// remember the old num of dragon glass pieces
         numDragonglassPieces = other.numDragonglassPieces;
-        map = new int[other.map.length][other.map[0].length];
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                map[i][j] = other.map[i][j];
-            }
-        }
+        numWhitewalkers = other.numWhitewalkers;
     }
 
-    public void genGrid() {
-        int numWhiteWalkers = (int) (1 + Math.random() * (Math.min(map.length, map[0].length) - 1));
-        numDragonglassPieces = (int) (1 + Math.random() * 2);
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                map[i][j] = EMPTY;
-            }
-        }
-
-        int k = 0;
-        while (k < numWhiteWalkers) {
-            int newC = (int) (Math.random() * this.map[0].length);
-            int newR = (int) (Math.random() * this.map.length);
-            if (newC != map[0].length - 1 && newR != map.length - 1 && map[newR][newC] == EMPTY) {
-                map[newR][newC] = WHITEWALKER;
-                k++;
-            }
-        }
-
-        boolean noStone = true;
-
-        do {
-            int newC = (int) (Math.random() * this.map[0].length);
-            int newR = (int) (Math.random() * this.map.length);
-            if (newC != this.map[0].length - 1 && newR != this.map.length - 1 && map[newR][newC] == EMPTY) {
-                map[newR][newC] = DRAGONSTONE;
-                noStone = false;
-            }
-        } while (noStone);
+    public void genGrid(int rows, int cols)
+    {
+    	numWhitewalkers = (int) (1 + Math.random() * (Math.min(rows, cols) - 1));
+        numDragonglassPieces = (int) (1 + Math.random() * numWhitewalkers);
+        
+        initialState = new SaveWesterosState(this, rows, cols);
     }
 
-    public void kill(int row, int col) {
-        map[row][col] = EMPTY;
+    public void print()
+    {
+    	initialState.print();
     }
 
-    public void print() {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                System.out.print("[" + ((map[i][j] == EMPTY) ? " " : (map[i][j] == WHITEWALKER) ? "W" : "D") + "]");
-            }
-            System.out.println("");
-        }
-    }
-
-    public boolean isGoal() {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == WHITEWALKER) {
+    public boolean isGoal(State state)
+    {
+    	SaveWesterosState s = (SaveWesterosState)state;
+    	for (int i = 0; i < s.map.length; i++)
+		{
+            for (int j = 0; j < s.map[i].length; j++)
+            {
+                if (s.isWhitewalker(i, j))
+                {
                     return false;
                 }
             }
         }
-        return true;
-    }
-
-    public boolean equals(SaveWesteros other) {
-        for (int i = 0; i < map.length && i < other.map.length; i++) {
-            for (int j = 0; j < map[i].length && i < other.map[i].length; j++) {
-                if (map[i][j] != other.map[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean isEmpty(int row, int col) {
-        return map[row][col] == EMPTY;
-    }
-
-    public boolean isDragonstone(int row, int col) {
-        return map[row][col] == DRAGONSTONE;
-    }
-
-    public boolean isWhitewalker(int row, int col) {
-        return map[row][col] == WHITEWALKER;
+		return true;
     }
 }
