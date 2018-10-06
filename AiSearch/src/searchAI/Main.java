@@ -19,8 +19,13 @@ public class Main {
 
             Node current = q.remove();
             numNodes+=1;
-            if(numNodes%10000 ==0)
-                System.out.println(numNodes+" "+s.numDragonglassPieces);
+            if(numNodes%20000 ==0)
+            {
+                current.state.print();
+                System.out.println(numNodes+" "+s.numDragonglassPieces+" "+s.dragonglass);
+            }
+//            System.out.println(current.state.sequenceOfActions);
+
             if (current.state.isGoal()) {
                 System.out.println("Goal found!:   " +numNodes+", numDragonglass: "+s.numDragonglassPieces);
 

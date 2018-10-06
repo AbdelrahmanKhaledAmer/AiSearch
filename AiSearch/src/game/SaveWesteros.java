@@ -31,7 +31,7 @@ public class SaveWesteros extends GenericSearchProblem {
     }
 
     public void genGrid() {
-        int numWhiteWalkers = (int) (1 + Math.random() * (Math.min(map.length, map[0].length) - 1));
+        int numWhiteWalkers = (int) (1 + Math.random() * (Math.min(map.length, map[0].length)));
         numDragonglassPieces = (int) (1 + Math.random() * 2);
         System.out.println("the game has: "+numDragonglassPieces);
 
@@ -87,16 +87,17 @@ public class SaveWesteros extends GenericSearchProblem {
 //        return true;
 //    }
 
-    public boolean equals(SaveWesteros other) {
-        for (int i = 0; i < map.length && i < other.map.length; i++) {
-            for (int j = 0; j < map[i].length && i < other.map[i].length; j++) {
-                if (map[i][j] != other.map[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+//    public boolean equals(SaveWesteros other) {
+//        System.out.println("lala");
+//        for (int i = 0; i < map.length && i < other.map.length; i++) {
+//            for (int j = 0; j < map[i].length && i < other.map[i].length; j++) {
+//                if (map[i][j] != other.map[i][j]) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
 //    public boolean isEmpty(int row, int col) {
 //        return map[row][col] == EMPTY;

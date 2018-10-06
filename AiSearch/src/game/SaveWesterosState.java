@@ -85,7 +85,14 @@ public class SaveWesterosState
 
 	public boolean equals(SaveWesterosState other)
 	{
-		return saveWesteros.equals(other.saveWesteros) && col == other.col &&
+		for (int i = 0; i < map.length && i < other.map.length; i++) {
+            for (int j = 0; j < map[i].length && i < other.map[i].length; j++) {
+                if (map[i][j] != other.map[i][j]) {
+                    return false;
+                }
+            }
+        }
+		return  col == other.col &&
 				row == other.row && dragonglass == other.dragonglass;
 	}
 
@@ -154,9 +161,10 @@ public class SaveWesterosState
 	public SaveWesterosState pick()
 	{
 		SaveWesterosState s = new SaveWesterosState(this);
-		s.dragonglass = saveWesteros.numDragonglassPieces;
+		s.dragonglass = numDragonglassPieces;
 		s.sequenceOfActions.add(PICK);
 		s.cost += D_PICK;
+//		System.out.println("returned from pick");
 		return s;
 	}
 
@@ -188,7 +196,7 @@ public class SaveWesterosState
 		return X_TO_E;
 	}
 
-	public SaveWesterosState north()
+	public SaveWesterosState north() //TODO
 	{
 		SaveWesterosState s = new SaveWesterosState(this);
 		s.updatePosition(this.col, this.row - 1);
@@ -252,28 +260,43 @@ public class SaveWesterosState
 		}
 		else
 		{
+//			System.out.println("checking possible states");
 			SaveWesterosState s1 = this.north();
 			if(!s1.equals(this) && !s1.isAncestor())
 			{
+//				System.out.println("adding node 1");
 				q.add(new Node(s1));
 			}
 			SaveWesterosState s2 = this.south();
+
 			if(!s2.equals(this) && !s2.isAncestor())
 			{
+//				System.out.println("adding node 2");
 				q.add(new Node(s2));
 			}
 			SaveWesterosState s3 = this.east();
+//			System.out.println("checking "+(s3.isAncestor())+" jon "+row+" "+col);
+//			this.print();
+//			s3.print();
+//			System.out.println("nehahahahahahahahaha");
 			if(!s3.equals(this) && !s3.isAncestor())
 			{
+
+//				System.out.println("adding node 3");
+
 				q.add(new Node(s3));
 			}
 			SaveWesterosState s4 = this.west();
 			if(!s4.equals(this) && !s4.isAncestor())
 			{
+//				System.out.println("adding node 4");
+
 				q.add(new Node(s4));
 			}
 			if(this.dragonglass == 0 && this.isDragonstone(this.row, this.col))
 			{
+//				System.out.println("adding node 5");
+
 				SaveWesterosState s5 = this.pick();
 				q.add(new Node(s5));
 			}
@@ -284,6 +307,7 @@ public class SaveWesterosState
 					&& this.dragonglass > 0)
 			{
 				SaveWesterosState s6 = this.kill();
+//				System.out.println("adding node 6");
 				q.add(new Node(s6));
 			}
 		}
@@ -304,9 +328,9 @@ public class SaveWesterosState
 			int dCol = 0;
 			int dragonstoneDistance = 0;
 			// Get Manhattan Distance to dragonstone
-			for (int r = 0; r < saveWesteros.map.length; r++)
+			for (int r = 0; r < this.map.length; r++)
 			{
-				for (int c = 0; c < saveWesteros.map[r].length; c++)
+				for (int c = 0; c < this.map[r].length; c++)
 				{
 					if(this.isDragonstone(r, c))
 					{
@@ -325,9 +349,9 @@ public class SaveWesterosState
 			possibleCost += D_PICK;
 //			System.out.println(possibleCost);
 			// Get Manhattan distance to a whitewalker
-			for (int r = 0; r < saveWesteros.map.length; r++)
+			for (int r = 0; r < this.map.length; r++)
 			{
-				for (int c = 0; c < saveWesteros.map[r].length; c++)
+				for (int c = 0; c < this.map[r].length; c++)
 				{
 					if(this.isWhitewalker(r, c)) {
 						int d = Math.abs(r - dRow) + Math.abs(c - dCol);
@@ -346,9 +370,9 @@ public class SaveWesterosState
 //			System.out.println(possibleCost);
 		} else {
 			// Get Manhattan distance to a whitewalker
-			for (int r = 0; r < saveWesteros.map.length; r++)
+			for (int r = 0; r < this.map.length; r++)
 			{
-				for (int c = 0; c < saveWesteros.map[r].length; c++)
+				for (int c = 0; c < this.map[r].length; c++)
 				{
 					if(this.isWhitewalker(r, c)) {
 						int d = Math.abs(r - row) + Math.abs(c - col);
