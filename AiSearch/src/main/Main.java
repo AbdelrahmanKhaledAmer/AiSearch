@@ -8,6 +8,12 @@ public class Main extends PApplet
 {
 	int gridWidth = 4;
 	int gridHeight = 4;
+	char[] actions;
+	int actIdx = 0;
+	int jonRow;
+	int jonCol;
+	int time;
+	SaveWesterosState state;
 
 	float horizontalOffset = 50.0f;
 	float verticalOffset;
@@ -22,26 +28,86 @@ public class Main extends PApplet
 	{
 		SaveWesteros g = new SaveWesteros(gridWidth, gridHeight);
 		g.print();
+		state = (SaveWesterosState)g.initialState;
 		Node n = Search.BFS(g);
-		System.out.println(n.state.sequenceOfActions);
+		jonRow = gridHeight - 1;
+		jonCol = gridWidth - 1;
+		if(n == null)
+		{
+			System.exit(0);
+		} else {
+			actions = n.state.sequenceOfActions.toCharArray();
+		}
+		
 		cellLength = ((float)width - 2 * horizontalOffset) / gridWidth;
 		verticalOffset = ((float)height - cellLength * gridHeight) / 2;
+		time = millis();
 	}
-
+	
+	public void performNextAction()
+	{
+		if(actIdx == actions.length)
+		{
+			System.out.println("Jon Did It!");
+			noLoop();
+			return;
+		}
+		char action = actions[actIdx++];
+		switch(action)
+		{
+		case 'N':
+			state = state.north();
+			jonRow--;
+			break;
+		case 'S':
+			state = state.south();
+			jonRow++;
+			break;
+		case 'E':
+			state = state.east();
+			jonCol++;
+			break;
+		case 'W':
+			state = state.west();
+			jonCol--;
+			break;
+		case 'K':
+			state = state.kill();
+			break;
+		case 'P':
+			state = state.pick();
+			break;
+		}
+	}
+	
 	public void draw()
 	{
-		background(0);
-		fill(255);
-		stroke(255);
-		for(float i = 0; i < gridWidth + 1; i++)
+		if(millis() > time + 1000)
 		{
-			line(i * cellLength + horizontalOffset, verticalOffset, i * cellLength + horizontalOffset, height - verticalOffset);
+			performNextAction();
+			time = millis();
 		}
-		for(float i = 0; i < gridHeight + 1; i++)
+		background(100);
+		stroke(255, 0, 0);
+		for(float i = 0; i < gridHeight; i += 1.0f)
 		{
-			line(horizontalOffset, i * cellLength + verticalOffset, width - horizontalOffset, i * cellLength + verticalOffset);
+			for (float j = 0; j < gridWidth; j += 1.0f)
+			{
+				if(state.isEmpty((int)i, (int)j))
+				{
+					fill(255);
+				} else if (state.isDragonstone((int)i, (int)j)) {
+					fill(255, 0, 0);
+				} else if (state.isWhitewalker((int)i, (int)j)) {
+					fill(0, 255, 0);
+				}
+				if((int)i == jonRow && (int)j == jonCol)
+				{
+					fill(0, 0, 255);
+				}
+				rect(j * cellLength + horizontalOffset, i * cellLength + verticalOffset, cellLength, cellLength);				
+			}
 		}
-		//noLoop();
 	}
 	
 	public static void main(String[] args)

@@ -17,7 +17,7 @@ public class SaveWesteros extends GenericSearchProblem {
     public void genGrid(int rows, int cols) {
         int[][] grid = new int[rows][cols];
         int numWhiteWalkers = (int) (1 + Math.random() * (rows*cols / 2));
-        numDragonglassPieces = (int) (1 + Math.random() * numWhiteWalkers);
+        numDragonglassPieces = (int) (1 + Math.random() * numWhiteWalkers / 2);
         System.out.println("the game has: " + numDragonglassPieces);
 
         for (int i = 0; i < grid.length; i++) {
