@@ -5,10 +5,11 @@ import game.SaveWesterosState;
 
 public class Main {
     static int numNodes;
+
     public static void generic_search(GenericSearchProblem problem, int SearchFunction) { // SearchFunction number represents the search function to use
         //reset num of nodes
-        numNodes =0;
-        SaveWesterosState s = new SaveWesterosState((SaveWesteros) problem); // initial state
+        numNodes = 0;
+        SaveWesterosState s = ((SaveWesteros) problem).initialState; // initial state
         SearchQ q = new SearchQ(SearchFunction);
         q.add(new Node(s));
         while (true) {
@@ -18,16 +19,13 @@ public class Main {
             }
 
             Node current = q.remove();
-            numNodes+=1;
-            if(numNodes%20000 ==0)
-            {
-                current.state.print();
-                System.out.println(numNodes+" "+s.numDragonglassPieces+" "+s.dragonglass);
-            }
-//            System.out.println(current.state.sequenceOfActions);
+            numNodes += 1;
+
+            if (numNodes % 15000 == 0)
+                System.out.println("Currently at " + numNodes);
 
             if (current.state.isGoal()) {
-                System.out.println("Goal found!:   " +numNodes+", numDragonglass: "+s.numDragonglassPieces);
+                System.out.println("Goal found!:   " + numNodes + ", numDragonglass: " + s.numDragonglassPieces);
 
                 System.out.println(current.state.sequenceOfActions);
                 break;
@@ -49,7 +47,9 @@ public class Main {
         generic_search(problem, 3);
     }
 
-    public static void Greedy(GenericSearchProblem problem) { generic_search(problem, 4);}
+    public static void Greedy(GenericSearchProblem problem) {
+        generic_search(problem, 4);
+    }
 
     public static void AStar(GenericSearchProblem problem) {
         generic_search(problem, 5);
@@ -66,6 +66,8 @@ public class Main {
                 SaveWesteros g = new SaveWesteros(4, 4);
                 g.print();
                 System.out.print("DFS: ");
+                DFS(g);
+                System.out.print("BFS: ");
                 DFS(g);
                 System.out.print("UCS: ");
                 UCS(g);
