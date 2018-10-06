@@ -2,10 +2,11 @@ package game;
 
 import searchAI.Node;
 import searchAI.SearchQ;
+import searchAI.State;
 
 import java.util.ArrayList;
 
-public class SaveWesterosState {
+public class SaveWesterosState extends State {
     private static final int MAX_SIZE = 1000000;
     // action list available (operators)
     private static final int NORTH = 1;
@@ -29,8 +30,8 @@ public class SaveWesterosState {
     public final int CMAX;
     public final int RMAX;
 
-    public int col, row, cost, dragonglass, numDragonglassPieces, map[][];
-    public ArrayList<Integer> sequenceOfActions;
+    public int col, row, dragonglass, numDragonglassPieces, map[][];
+//    public ArrayList<Integer> sequenceOfActions;
 
     public SaveWesterosState(int[][] grid, int numDragonglassPieces, SaveWesteros s) {
 //		this.saveWesteros = s;
