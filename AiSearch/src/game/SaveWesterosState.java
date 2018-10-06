@@ -8,20 +8,26 @@ import java.util.ArrayList;
 
 public class SaveWesterosState extends State {
     private static final int MAX_SIZE = 1000000;
-    // action list available (operators)
-    private static final int NORTH = 1;
-    private static final int SOUTH = 2;
-    private static final int EAST = 3;
-    private static final int WEST = 4;
-    private static final int PICK = 5;
-    private static final int KILL = 6;
-    //costs
-    // Movement Costs
-    private static final int X_TO_W = 64;
-    private static final int X_TO_E = 16;
-    private static final int E_TO_D_NO_DG = 8;
-    // Picking up Dragonglass cost
-    private static final int D_PICK = 4;
+ // action list available (operators)
+ 	private static final char NORTH = 'N';
+ 	private static final int NORTHI = 0;
+ 	private static final char SOUTH = 'S';
+ 	private static final int SOUTHI = 1;
+ 	private static final char EAST  = 'E';
+ 	private static final int EASTI  = 2;
+ 	private static final char WEST  = 'W';
+ 	private static final int WESTI  = 3;
+ 	private static final char PICK  = 'P';
+ 	private static final char KILL  = 'K';
+
+ 	// Movement Costs
+ 	private static final int X_TO_W       = 64;
+ 	private static final int X_TO_E       = 16;
+ 	private static final int E_TO_D_NO_DG = 8;
+
+ 	// Picking up Dragonglass cost
+ 	private static final int D_PICK = 4;
+ 	
     // Killing Whitewalkers cost
     private static final int KILL1 = 4;
     private static final int KILL2 = 2;
@@ -31,18 +37,15 @@ public class SaveWesterosState extends State {
     public final int RMAX;
 
     public int col, row, dragonglass, numDragonglassPieces, map[][];
-//    public ArrayList<Integer> sequenceOfActions;
 
     public SaveWesterosState(int[][] grid, int numDragonglassPieces, SaveWesteros s) {
-//		this.saveWesteros = s;
-
         this.map = clone(grid);
         this.RMAX = grid.length;
         this.CMAX = grid[0].length;
         this.row = grid.length - 1;
         this.col = grid[0].length - 1;
         this.numDragonglassPieces = numDragonglassPieces;
-        sequenceOfActions = new ArrayList<Integer>(MAX_SIZE);
+        sequenceOfActions = "";
     }
 
     public SaveWesterosState(SaveWesterosState s) {
@@ -53,7 +56,7 @@ public class SaveWesterosState extends State {
         this.col = s.col;
         this.row = s.row;
         this.dragonglass = s.dragonglass;
-        this.sequenceOfActions = (ArrayList<Integer>) s.sequenceOfActions.clone();
+        this.sequenceOfActions = s.sequenceOfActions;
         this.cost = s.cost;
         this.numDragonglassPieces = s.numDragonglassPieces;
     }
@@ -131,16 +134,16 @@ public class SaveWesterosState extends State {
             case 0:
                 break;
             case 1:
-                s.sequenceOfActions.add(KILL);
+                s.sequenceOfActions += KILL;
                 s.cost += KILL1;
                 break;
             case 2:
-                s.sequenceOfActions.add(KILL);
+                s.sequenceOfActions += KILL;
 
                 s.cost += KILL2;
                 break;
             case 3:
-                s.sequenceOfActions.add(KILL);
+                s.sequenceOfActions += KILL;
 
                 s.cost += KILL3;
                 break;
@@ -152,7 +155,7 @@ public class SaveWesterosState extends State {
     public SaveWesterosState pick() {
         SaveWesterosState s = new SaveWesterosState(this);
         s.dragonglass = numDragonglassPieces;
-        s.sequenceOfActions.add(PICK);
+        s.sequenceOfActions += PICK;
         s.cost += D_PICK;
         return s;
     }
@@ -183,50 +186,60 @@ public class SaveWesterosState extends State {
     {
         SaveWesterosState s = new SaveWesterosState(this);
         s.updatePosition(this.col, this.row - 1);
-        s.sequenceOfActions.add(NORTH);
+        s.sequenceOfActions += NORTH;
         return s;
     }
 
     public SaveWesterosState south() {
         SaveWesterosState s = new SaveWesterosState(this);
         s.updatePosition(this.col, this.row + 1);
-        s.sequenceOfActions.add(SOUTH);
+        s.sequenceOfActions += SOUTH;
         return s;
     }
 
     public SaveWesterosState east() {
         SaveWesterosState s = new SaveWesterosState(this);
         s.updatePosition(this.col + 1, this.row);
-        s.sequenceOfActions.add(EAST);
+        s.sequenceOfActions += EAST;
         return s;
     }
 
     public SaveWesterosState west() {
         SaveWesterosState s = new SaveWesterosState(this);
         s.updatePosition(this.col - 1, this.row);
-        s.sequenceOfActions.add(WEST);
+        s.sequenceOfActions += WEST;
         return s;
     }
 
-    public boolean isAncestor() {
-        boolean reduced = false;
-        int[] counts = new int[5];
-        for (int i = sequenceOfActions.size() - 1; i >= 0; i--) {
-            //Looking for these sequences only: ns, sn, ew, we, nesw, nwse, senw, swne
-            if (sequenceOfActions.get(i) < 5) {
-                counts[sequenceOfActions.get(i)]++;
-            } else {
-                break;
-            }
-            if ((counts[NORTH] == counts[SOUTH] && counts[EAST] == 0 && counts[WEST] == 0) // ns and sn
-                    || (counts[EAST] == counts[WEST] && counts[NORTH] == 0 && counts[SOUTH] == 0) // ew and we
-                    || (counts[NORTH] == counts[SOUTH] && counts[EAST] == counts[WEST])) {
-                reduced = true;
-                break;
-            }
-        }
-        return reduced;
-    }
+    public boolean isAncestor()
+	{
+		boolean reduced = false;
+		int[] counts = new int[4];
+		for(int i = sequenceOfActions.length() - 1; i >= 0; i--)
+		{
+			//Looking for these sequences only: ns, sn, ew, we, nesw, nwse, senw, swne
+			if(sequenceOfActions.charAt(i) == 'N')
+			{
+				counts[NORTHI]++;
+			} else if(sequenceOfActions.charAt(i) == 'S') {
+				counts[SOUTHI]++;
+			} else if(sequenceOfActions.charAt(i) == 'E') {
+				counts[EASTI]++;
+			} else if(sequenceOfActions.charAt(i) == 'W') {
+				counts[WESTI]++;
+			} else {
+				break;
+			}
+			if((counts[NORTHI] == counts[SOUTHI] && counts[EASTI] == 0 && counts[WESTI] == 0) // ns and sn
+				|| (counts[EASTI] == counts[WESTI] && counts[NORTHI] == 0 && counts[SOUTHI] == 0) // ew and we
+				|| (counts[NORTHI] == counts[SOUTHI] && counts[EASTI] == counts [WESTI]))
+			{
+				reduced = true;
+				break;
+			}
+		}
+		return reduced;
+	}
 
     public SearchQ expandNode(SearchQ q) {
         if (this.isWhitewalker(this.row, this.col)) {
