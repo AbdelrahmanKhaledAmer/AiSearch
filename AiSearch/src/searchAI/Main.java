@@ -1,13 +1,14 @@
 package searchAI;
 
 import game.SaveWesteros;
+import game.SaveWesterosState;
 
 public class Main {
     static int numNodes;
     public static void generic_search(GenericSearchProblem problem, int SearchFunction) { // SearchFunction number represents the search function to use
         //reset num of nodes
         numNodes =0;
-        Node s = new Node((SaveWesteros) problem); // initial state
+        SaveWesterosState s = new SaveWesterosState((SaveWesteros) problem); // initial state
         SearchQ q = new SearchQ(SearchFunction);
         q.add(s);
         while (true) {
@@ -16,12 +17,12 @@ public class Main {
                 break;
             }
 
-            Node current = q.remove();
+            SaveWesterosState current = q.remove();
             numNodes+=1;
             if(numNodes%10000 ==0)
-                System.out.println(numNodes);
+                System.out.println(numNodes+" "+s.numDragonglassPieces);
             if (current.isGoal()) {
-                System.out.println("Goal found!:   " +numNodes);
+                System.out.println("Goal found!:   " +numNodes+", numDragonglass: "+s.numDragonglassPieces);
 
                 System.out.println(current.sequenceOfActions);
                 break;

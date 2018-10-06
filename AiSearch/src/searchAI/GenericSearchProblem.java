@@ -1,6 +1,6 @@
 package searchAI;
 
 public abstract class GenericSearchProblem {
-    State initialState;
-    public abstract boolean isGoal();
+//    State initialState;
+//    public abstract boolean isGoal();
 }

@@ -1,11 +1,13 @@
 package searchAI;
 
+import game.SaveWesterosState;
+
 import java.util.*;
 
 public class SearchQ {
-    Stack<Node> s;
-    Queue<Node> q;
-    PriorityQueue<Node> pq;
+    Stack<SaveWesterosState> s;
+    Queue<SaveWesterosState> q;
+    PriorityQueue<SaveWesterosState> pq;
     int which =-1; // 1, stack 2 queue, 3 pq
     private final int DFS = 1;  // valid for ID and DFS
     private final int BFS =2;
@@ -17,20 +19,20 @@ public class SearchQ {
     public SearchQ(int n){
         which = n;
 
-        Comparator<Node> OrderByCost =  new Comparator<Node>() {
-            public int compare(Node s1, Node e2) {
+        Comparator<SaveWesterosState> OrderByCost =  new Comparator<SaveWesterosState>() {
+            public int compare(SaveWesterosState s1, SaveWesterosState e2) {
                 return s1.cost - e2.cost;
             }
         };
 
-        Comparator<Node> OrderByHeuristic =  new Comparator<Node>() {
-            public int compare(Node s1, Node e2) {
+        Comparator<SaveWesterosState> OrderByHeuristic =  new Comparator<SaveWesterosState>() {
+            public int compare(SaveWesterosState s1, SaveWesterosState e2) {
                 return s1.heuristic1() - e2.heuristic1();
             }
         };
 
-        Comparator<Node> AStarOrder =  new Comparator<Node>() {
-            public int compare(Node s1, Node e2) {
+        Comparator<SaveWesterosState> AStarOrder =  new Comparator<SaveWesterosState>() {
+            public int compare(SaveWesterosState s1, SaveWesterosState e2) {
                 return s1.heuristic1()+s1.cost - e2.heuristic1()-e2.cost;
             }
         };
@@ -38,20 +40,20 @@ public class SearchQ {
 
         switch (which) {
             case DFS:
-                s = new Stack<Node>(); break;
+                s = new Stack<SaveWesterosState>(); break;
             case BFS:
-                q = new LinkedList<Node>(); break;
+                q = new LinkedList<SaveWesterosState>(); break;
             case UCS:
-                pq = new PriorityQueue<Node>(OrderByCost); break;
+                pq = new PriorityQueue<SaveWesterosState>(OrderByCost); break;
             case GREEDY:
-                pq = new PriorityQueue<Node>(OrderByHeuristic); break;
+                pq = new PriorityQueue<SaveWesterosState>(OrderByHeuristic); break;
             case ASTAR:
-                pq = new PriorityQueue<Node>(AStarOrder); break;
+                pq = new PriorityQueue<SaveWesterosState>(AStarOrder); break;
         }
 
     }
 
-    public void add(Node e){
+    public void add(SaveWesterosState e){
         switch (which) {
             case DFS:
                 s.add(e); break;
@@ -64,7 +66,7 @@ public class SearchQ {
         }
 
     }
-    public Node remove(){
+    public SaveWesterosState remove(){
         switch (which) {
             case DFS:
                 return s.pop();

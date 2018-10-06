@@ -3,9 +3,9 @@ package game;
 import searchAI.GenericSearchProblem;
 
 public class SaveWesteros extends GenericSearchProblem {
-    private final int EMPTY = 0;
-    private final int DRAGONSTONE = 1;
-    private final int WHITEWALKER = 2;
+    public static final int EMPTY = 0;
+    public static final int DRAGONSTONE = 1;
+    public static final int WHITEWALKER = 2;
 
     public int[][] map;
     public int numDragonglassPieces;
@@ -33,6 +33,8 @@ public class SaveWesteros extends GenericSearchProblem {
     public void genGrid() {
         int numWhiteWalkers = (int) (1 + Math.random() * (Math.min(map.length, map[0].length) - 1));
         numDragonglassPieces = (int) (1 + Math.random() * 2);
+        System.out.println("the game has: "+numDragonglassPieces);
+
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j] = EMPTY;
@@ -74,16 +76,16 @@ public class SaveWesteros extends GenericSearchProblem {
         }
     }
 
-    public boolean isGoal() {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == WHITEWALKER) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+//    public boolean isGoal() {
+//        for (int i = 0; i < map.length; i++) {
+//            for (int j = 0; j < map[i].length; j++) {
+//                if (map[i][j] == WHITEWALKER) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
     public boolean equals(SaveWesteros other) {
         for (int i = 0; i < map.length && i < other.map.length; i++) {
@@ -96,15 +98,15 @@ public class SaveWesteros extends GenericSearchProblem {
         return true;
     }
 
-    public boolean isEmpty(int row, int col) {
-        return map[row][col] == EMPTY;
-    }
-
-    public boolean isDragonstone(int row, int col) {
-        return map[row][col] == DRAGONSTONE;
-    }
-
-    public boolean isWhitewalker(int row, int col) {
-        return map[row][col] == WHITEWALKER;
-    }
+//    public boolean isEmpty(int row, int col) {
+//        return map[row][col] == EMPTY;
+//    }
+//
+//    public boolean isDragonstone(int row, int col) {
+//        return map[row][col] == DRAGONSTONE;
+//    }
+//
+//    public boolean isWhitewalker(int row, int col) {
+//        return map[row][col] == WHITEWALKER;
+//    }
 }
