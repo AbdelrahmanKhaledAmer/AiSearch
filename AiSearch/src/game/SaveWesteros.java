@@ -63,9 +63,9 @@ public class SaveWesteros extends GenericSearchProblem {
         } while (noStone);
     }
 
-    public void kill(int row, int col) {
-        map[row][col] = EMPTY;
-    }
+//    public void kill(int row, int col) {
+//        map[row][col] = EMPTY;
+//    }
 
     public void print() {
         for (int i = 0; i < map.length; i++) {

@@ -60,7 +60,7 @@ public class SaveWesterosState
 	public SaveWesterosState(SaveWesterosState s)
 	{
 		this.saveWesteros = new SaveWesteros(s.saveWesteros);
-		this.map = this.saveWesteros.map;
+		this.map = s.map;
 		this.RMAX = s.RMAX;
 		this.CMAX = s.CMAX;
 		this.col = s.col;
@@ -68,7 +68,7 @@ public class SaveWesterosState
 		this.dragonglass = s.dragonglass;
 		this.sequenceOfActions = (ArrayList<Integer>) s.sequenceOfActions.clone();
 		this.cost = s.cost;
-		this.numDragonglassPieces = saveWesteros.numDragonglassPieces;
+		this.numDragonglassPieces = s.numDragonglassPieces;
 	}
 
 	public boolean isGoal()
@@ -103,6 +103,9 @@ public class SaveWesterosState
 		System.out.println("Jon: (" + this.col + ", " + this.row + ")");
 		System.out.println("***********************");
 	}
+	public void removeWhiteWalker(int row, int col) {
+		map[row][col] = SaveWesteros.EMPTY;
+	}
 
 	public SaveWesterosState kill()
 	{
@@ -111,28 +114,28 @@ public class SaveWesterosState
 		boolean killed = false;
 		if(s.row < s.RMAX - 1 && s.isWhitewalker(s.row + 1, s.col))
 		{
-			s.saveWesteros.kill(s.row + 1, s.col);
+			s.removeWhiteWalker(s.row + 1, s.col);
 			killed = true;
 			num++;
 		}
 
 		if(s.row > 0 && s.isWhitewalker(s.row - 1, s.col))
 		{
-			s.saveWesteros.kill(s.row - 1, s.col);
+			s.removeWhiteWalker(s.row - 1, s.col);
 			killed = true;
 			num++;
 		}
 
 		if(s.col < s.CMAX - 1 && s.isWhitewalker(s.row, s.col + 1))
 		{
-			s.saveWesteros.kill(s.row, s.col + 1);
+			s.removeWhiteWalker(s.row, s.col + 1);
 			killed = true;
 			num++;
 		}
 
 		if(s.col > 0 && s.isWhitewalker(s.row, s.col - 1))
 		{
-			s.saveWesteros.kill(s.row, s.col - 1);
+			s.removeWhiteWalker(s.row, s.col - 1);
 			killed = true;
 			num++;
 		}
