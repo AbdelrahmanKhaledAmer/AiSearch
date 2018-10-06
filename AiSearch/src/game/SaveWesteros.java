@@ -8,21 +8,10 @@ public class SaveWesteros extends GenericSearchProblem {
     public static final int WHITEWALKER = 2;
 
     public int numDragonglassPieces;
-    public SaveWesterosState initialState;
+//    public SaveWesterosState initialState;
 
     public SaveWesteros(int rows, int cols) {
         genGrid(rows, cols);
-    }
-
-    public SaveWesteros(SaveWesteros other) {    // another constructor for copying the saveWesteros
-        //remember the old num of dragon glass pieces
-        numDragonglassPieces = other.numDragonglassPieces;
-        this.initialState.map = new int[other.initialState.map.length][other.initialState.map[0].length];
-        for (int i = 0; i < this.initialState.map.length; i++) {
-            for (int j = 0; j < this.initialState.map[i].length; j++) {
-                this.initialState.map[i][j] = other.initialState.map[i][j];
-            }
-        }
     }
 
     public void genGrid(int rows, int cols) {

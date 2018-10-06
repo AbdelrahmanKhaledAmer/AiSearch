@@ -9,7 +9,7 @@ public class Main {
     public static void generic_search(GenericSearchProblem problem, int SearchFunction) { // SearchFunction number represents the search function to use
         //reset num of nodes
         numNodes = 0;
-        SaveWesterosState s = ((SaveWesteros) problem).initialState; // initial state
+        SaveWesterosState s = (SaveWesterosState) ((SaveWesteros) problem).initialState; // initial state
         SearchQ q = new SearchQ(SearchFunction);
         q.add(new Node(s));
         while (true) {
@@ -21,7 +21,7 @@ public class Main {
             Node current = q.remove();
             numNodes += 1;
 
-            if (numNodes % 15000 == 0)
+            if (numNodes % 1000000 == 0)
                 System.out.println("Currently at " + numNodes);
 
             if (current.state.isGoal()) {
@@ -75,8 +75,8 @@ public class Main {
                 AStar(g);
                 System.out.print("Greedy: ");
                 Greedy(g);
-
             } catch (OutOfMemoryError e) {
+                System.out.println("memory out of bound ");
                 count--;
             }
             count++;

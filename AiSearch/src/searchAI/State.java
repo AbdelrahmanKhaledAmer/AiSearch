@@ -8,5 +8,6 @@ public abstract class State {
     public abstract boolean isGoal();
     public abstract int heuristic1();
     public abstract SearchQ expandNode(SearchQ q);
+    public abstract void print();
 
 }
