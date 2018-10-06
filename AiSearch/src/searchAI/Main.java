@@ -58,7 +58,7 @@ public class Main {
 
     public static void main(String[] args) {
         int count = 0;
-        int max = 10;
+        int max = 50;
 
         for (int i = 0; i < max; i++) {
             System.out.println("Trial#" + i);
@@ -68,7 +68,7 @@ public class Main {
                 System.out.print("DFS: ");
                 DFS(g);
                 System.out.print("BFS: ");
-                DFS(g);
+                BFS(g);
                 System.out.print("UCS: ");
                 UCS(g);
                 System.out.print("Astar: ");
