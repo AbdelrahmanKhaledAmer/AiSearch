@@ -1,5 +1,6 @@
 package game;
 
+import searchAI.Node;
 import searchAI.SearchQ;
 
 import java.util.ArrayList;
@@ -254,27 +255,27 @@ public class SaveWesterosState
 			SaveWesterosState s1 = this.north();
 			if(!s1.equals(this) && !s1.isAncestor())
 			{
-				q.add(s1);
+				q.add(new Node(s1));
 			}
 			SaveWesterosState s2 = this.south();
 			if(!s2.equals(this) && !s2.isAncestor())
 			{
-				q.add(s2);
+				q.add(new Node(s2));
 			}
 			SaveWesterosState s3 = this.east();
 			if(!s3.equals(this) && !s3.isAncestor())
 			{
-				q.add(s3);
+				q.add(new Node(s3));
 			}
 			SaveWesterosState s4 = this.west();
 			if(!s4.equals(this) && !s4.isAncestor())
 			{
-				q.add(s4);
+				q.add(new Node(s4));
 			}
 			if(this.dragonglass == 0 && this.isDragonstone(this.row, this.col))
 			{
 				SaveWesterosState s5 = this.pick();
-				q.add(s5);
+				q.add(new Node(s5));
 			}
 			if(((this.row < this.RMAX - 1 && this.isWhitewalker(this.row + 1, this.col))
 					|| (this.row > 0 && this.isWhitewalker(this.row - 1, this.col))
@@ -283,7 +284,7 @@ public class SaveWesterosState
 					&& this.dragonglass > 0)
 			{
 				SaveWesterosState s6 = this.kill();
-				q.add(s6);
+				q.add(new Node(s6));
 			}
 		}
 		return q;

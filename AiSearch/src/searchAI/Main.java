@@ -10,24 +10,24 @@ public class Main {
         numNodes =0;
         SaveWesterosState s = new SaveWesterosState((SaveWesteros) problem); // initial state
         SearchQ q = new SearchQ(SearchFunction);
-        q.add(s);
+        q.add(new Node(s));
         while (true) {
             if (q.isEmpty()) {
                 System.out.println("No solution");
                 break;
             }
 
-            SaveWesterosState current = q.remove();
+            Node current = q.remove();
             numNodes+=1;
             if(numNodes%10000 ==0)
                 System.out.println(numNodes+" "+s.numDragonglassPieces);
-            if (current.isGoal()) {
+            if (current.state.isGoal()) {
                 System.out.println("Goal found!:   " +numNodes+", numDragonglass: "+s.numDragonglassPieces);
 
-                System.out.println(current.sequenceOfActions);
+                System.out.println(current.state.sequenceOfActions);
                 break;
             }
-            q = current.expandNode(q);
+            q = current.state.expandNode(q);
         }
     }
 
