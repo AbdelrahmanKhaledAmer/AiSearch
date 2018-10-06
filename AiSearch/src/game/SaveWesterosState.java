@@ -21,16 +21,16 @@ public class SaveWesterosState extends State {
  	private static final char KILL  = 'K';
 
  	// Movement Costs
- 	private static final int X_TO_W       = 64;
- 	private static final int X_TO_E       = 16;
- 	private static final int E_TO_D_NO_DG = 8;
+ 	private static final int X_TO_W       = 243;
+ 	private static final int X_TO_E       = 81;
+ 	private static final int E_TO_D_NO_DG = 27;
 
  	// Picking up Dragonglass cost
- 	private static final int D_PICK = 4;
+ 	private static final int D_PICK = 27;
  	
     // Killing Whitewalkers cost
-    private static final int KILL1 = 4;
-    private static final int KILL2 = 2;
+    private static final int KILL1 = 9;
+    private static final int KILL2 = 3;
     private static final int KILL3 = 1;
 
     public final int CMAX;
