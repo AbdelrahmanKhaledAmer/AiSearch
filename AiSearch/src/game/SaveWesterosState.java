@@ -425,7 +425,170 @@ public class SaveWesterosState extends State {
 		return possibleCost;
 	}
 
-
+	public int heuristic2()
+   	{
+      		if (this.isGoal())
+      		{
+         		return 0;
+      		}
+      		int possibleCost = 0;
+      		int whitewalkerDistance = CMAX + RMAX + 1;
+      		if (this.dragonglass == 0)
+      		{
+         		int dRow = 0;
+         		int dCol = 0;
+         		int dragonstoneDistance = 0;
+         		for(int r = 0; r < this.map.length; r++)
+         		{
+            			for(int c = 0; c < this.map[r].length; c++)
+            			{
+               				if(this.isDragonstone(r, c))
+               				{
+                  				dragonstoneDistance = Math.abs(r - row) + Math.abs(c - col);
+                  				dRow = r;
+                  				dCol = c;
+                  				break;
+               				}
+            			}
+         		}
+         		possibleCost += (dragonstoneDistance - 1) * X_TO_E;
+         		possibleCost += E_TO_D_NO_DG;
+         		possibleCost += D_PICK;
+         		for(int r = 0; r < this.map.length; r++)
+         		{
+            			for(int c = 0; c < this.map[r].length; c++)
+            			{
+               				if(this.isWhitewalker(r, c)
+                     			&& (((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                     			&& (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1)))
+                     			|| (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
+                     			|| (c < (CMAX-2) && this.isWhitewalker(r, c + 2))))
+               				{
+                  				int d = Math.abs(r - dRow) + Math.abs((c+1) - dCol);
+                  				if(whitewalkerDistance > d)
+                  				{
+                     					whitewalkerDistance = d;
+                  				}
+               				} else {
+                     				if(this.isWhitewalker(r, c)
+                           			&& ((((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                           			&& (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))))
+                           			|| (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                           			|| (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))
+                           			|| (r < (RMAX-2) && this.isWhitewalker(r + 2, c))))
+                     				{
+                        				int d = Math.abs((r+1) - dRow) + Math.abs(c - dCol);
+                        				if(whitewalkerDistance > d)
+                        				{
+                           					whitewalkerDistance = d;
+                        				}
+                     				} else {
+                        				if(this.isWhitewalker(r, c)
+                        				&& (((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
+                        				&& (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c - 1)))
+                        				|| ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1)))
+                        				|| (c > 2 && this.isWhitewalker(r, c - 2))))
+                        				{
+                           					int d = Math.abs(r - dRow) + Math.abs((c-1) - dCol);
+                           					if(whitewalkerDistance > d)
+                           					{
+                              						whitewalkerDistance = d;
+                           					}
+                        				} else {
+                           					if (this.isWhitewalker(r, c)
+                              					&& ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
+                              					&& (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
+                                 				|| (r > 2 && this.isWhitewalker(r - 2, c))))
+                           					{
+                              						int d = Math.abs((r - 1) - dRow) + Math.abs(c - dCol);
+                              						if (whitewalkerDistance > d)
+                              						{
+                                 						whitewalkerDistance = d;
+                              						}
+                           					} else {
+                              						int d = Math.abs(r - dRow) + Math.abs(c - dCol);
+                              						if (whitewalkerDistance > d)
+                              						{
+                                 						whitewalkerDistance = d;
+                              						}
+                           					}
+                        				}
+                     				}
+                  			}
+               			}
+            		}
+         		possibleCost += (whitewalkerDistance - 1) * X_TO_E;
+         		possibleCost += KILL3;
+      			} else {
+         			for(int r = 0; r < this.map.length; r++)
+         			{
+            				for(int c = 0; c < this.map[r].length; c++) 
+					{
+               					if (this.isWhitewalker(r, c)
+                     				&& (((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                     				&& (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1)))
+                     				|| (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
+                     				|| (c < (CMAX - 2) && this.isWhitewalker(r, c + 2))))
+               					{
+                  					int d = Math.abs(r - row) + Math.abs((c + 1) - col);
+                  					if (whitewalkerDistance > d)
+                  					{
+                     						whitewalkerDistance = d;
+                  					}
+               					} else {
+                  					if (this.isWhitewalker(r, c)
+                        				&& ((((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                        				&& (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))))
+                        				|| (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
+                        				|| (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))
+                        				|| (r < (RMAX - 2) && this.isWhitewalker(r + 2, c))))
+                  					{
+                     						int d = Math.abs((r + 1) - row) + Math.	abs(c - col);
+                     						if (whitewalkerDistance > d)
+                     						{
+                        						whitewalkerDistance = d;
+                     						}
+                  					} else {
+                     						if (this.isWhitewalker(r, c)
+                     						&& (((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
+                     						&& (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c - 1)))
+                     						|| ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1)))
+                     						|| (c > 2 && this.isWhitewalker(r, c - 2))))
+                     						{
+                     							int d = Math.abs(r - row) + Math.abs((c - 1) - col);
+                     							if (whitewalkerDistance > d)
+                     							{
+                        							whitewalkerDistance = d;
+                     							}
+                   						  } else {
+                        						if (this.isWhitewalker(r, c)
+                        						&& ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
+                        						&& (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
+                        						|| (r > 2 && this.isWhitewalker(r - 2, c))))
+                        						{
+                        							int d = Math.abs((r - 1) - row) + Math.abs(c - col);
+                        							if (whitewalkerDistance > d)
+                        							{
+                           								whitewalkerDistance = d;
+                        							}
+                        						} else {
+                           							int d = Math.abs(r - row) + Math.abs(c - col);
+                           							if (whitewalkerDistance > d)
+                           							{
+                              								whitewalkerDistance = d;
+                           							}
+                        						}
+                     						}
+                  					}
+               					}
+            				}
+         			}
+      			}
+		
+      		possibleCost += (whitewalkerDistance - 1) * X_TO_E;
+      		possibleCost += KILL3;
+      		return possibleCost;
+   	}
 
 	public boolean isEmpty(int row, int col) {
 		return map[row][col] == SaveWesteros.EMPTY;
