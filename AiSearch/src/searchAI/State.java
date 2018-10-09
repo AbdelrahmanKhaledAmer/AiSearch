@@ -1,12 +1,16 @@
 package searchAI;
 
-public abstract class State
-{
-	public int cost;
-	public String sequenceOfActions;
-	public abstract boolean isGoal();
-	public abstract int heuristic1();
-	public abstract int heuristic2();
-	public abstract SearchQ expandNode(SearchQ q);
-	public abstract void print();
+public abstract class State {
+    public int cost;
+    public String sequenceOfActions;
+
+    public abstract boolean isGoal();
+
+    public abstract int heuristic1();
+
+    public abstract int heuristic2();
+
+    public abstract SearchQ expandNode(SearchQ q);
+
+    public abstract void print();
 }
