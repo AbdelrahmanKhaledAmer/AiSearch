@@ -7,8 +7,8 @@ import processing.core.PImage;
 
 public class Main extends PApplet
 {
-	int gridWidth = 6;
-	int gridHeight = 6;
+	int gridWidth = 5;
+	int gridHeight = 5;
 	char[] actions;
 	int actIdx = 0;
 	int jonRow;
@@ -24,6 +24,9 @@ public class Main extends PApplet
 	PImage jonk1;
 	PImage jonk2;
 	PImage jonk3;
+	PImage dragonstone;
+	PImage ww1;
+	PImage ww2;
 
 	final float offset = 50.0f;
 	float horizontalOffset;
@@ -44,6 +47,9 @@ public class Main extends PApplet
 		jonk1 = loadImage("jonk1.png");
 		jonk2 = loadImage("jonk2.png");
 		jonk3 = loadImage("jonk3.png");
+		dragonstone = loadImage("dragonstone.png");
+		ww1 = loadImage("ww1.png");
+		ww2 = loadImage("ww2.png");
 
 		SaveWesteros g = new SaveWesteros(gridHeight, gridWidth);
 		g.print();
@@ -73,6 +79,9 @@ public class Main extends PApplet
 		jonk1.resize((int)cellLength, (int)cellLength);
 		jonk2.resize((int)cellLength, (int)cellLength);
 		jonk3.resize((int)cellLength, (int)cellLength);
+		dragonstone.resize((int)cellLength, (int)cellLength);
+		ww1.resize((int)cellLength, (int)cellLength);
+		ww2.resize((int)cellLength, (int)cellLength);
 
 		imgTime = time = millis();
 		frame.setLocation(50, 50);
@@ -138,24 +147,25 @@ public class Main extends PApplet
 		}
 
 		background(100);
-		stroke(255, 0, 0);
+		stroke(0);
 		for(float i = 0; i < gridHeight; i += 1.0f)
 		{
 			for (float j = 0; j < gridWidth; j += 1.0f)
 			{
-				if(state.isEmpty((int)i, (int)j))
-				{
-					fill(255);
-				} else if (state.isDragonstone((int)i, (int)j)) {
-					fill(255, 0, 0);
-				} else if (state.isWhitewalker((int)i, (int)j)) {
-					fill(0, 255, 0);
-				}
-				if((int)i == jonRow && (int)j == jonCol)
-				{
-					fill(200);					
-				}
+				fill(255);
 				rect(j * cellLength + horizontalOffset, i * cellLength + verticalOffset, cellLength, cellLength);
+				
+				if (state.isDragonstone((int)i, (int)j))
+				{
+					image(dragonstone, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
+				} else if (state.isWhitewalker((int)i, (int)j)) {
+					if(alt)
+					{
+						image(ww1, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
+					} else {
+						image(ww2, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
+					}
+				}
 			}
 		}
 		if(kidx < 0)
