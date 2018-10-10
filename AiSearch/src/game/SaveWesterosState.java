@@ -124,7 +124,9 @@ public class SaveWesterosState extends State {
         System.out.println("***********************");
         for (int i = 0; i < this.map.length; i++) {
             for (int j = 0; j < this.map[i].length; j++) {
-                System.out.print("[" + ((this.map[i][j] == SaveWesteros.EMPTY) ? " " : (this.map[i][j] == SaveWesteros.WHITEWALKER) ? "W" : "D") + "]");
+                System.out.print("[" + ((this.map[i][j] == SaveWesteros.EMPTY) ? " " :
+                        (this.map[i][j] == SaveWesteros.WHITEWALKER) ? "W" :
+                                (this.map[i][j] == SaveWesteros.ObBSTACLE) ? "X" : "D") + "]");
             }
             System.out.println("");
         }
@@ -186,15 +188,15 @@ public class SaveWesterosState extends State {
         return s;
     }
 
-    private boolean isValid(int x, int y) {
-        return !(x >= CMAX || y >= RMAX || x < 0 || y < 0);
+    private boolean isValid(int col, int row) {
+        return !(col >= CMAX || row >= RMAX || col < 0 || row < 0) && map[row][col] != SaveWesteros.ObBSTACLE;
     }
 
-    public void updatePosition(int x, int y) {
-        if (isValid(x, y)) {
-            this.cost += getMovementCost(x, y);
-            this.col = x;
-            this.row = y;
+    public void updatePosition(int col, int row) {
+        if (isValid(col, row)) {
+            this.cost += getMovementCost(col, row);
+            this.col = col;
+            this.row = row;
         }
     }
 

@@ -112,14 +112,14 @@ public class Search {
             try {
                 SaveWesteros g = new SaveWesteros(4, 4);
                 g.print();
-//                System.out.print("DFS: ");
-//                DFS(g,100000);
-//                System.out.print("BFS: ");
-//                BFS(g);
-//                System.out.print("UCS: ");
-//                UCS(g);
-//                System.out.print("Astar: ");
-//                AStar(g);
+                System.out.print("DFS: ");
+                DFS(g,100000);
+                System.out.print("BFS: ");
+                BFS(g);
+                System.out.print("UCS: ");
+                UCS(g);
+                System.out.print("Astar: ");
+                AStar(g);
 ////				System.out.print("ASTAR 2: ");
 ////				AStar2(g);
 //                System.out.print("Greedy: ");
@@ -127,8 +127,8 @@ public class Search {
 ////				System.out.print("Greedy 2: ");
 ////				Greedy2(g);
 
-                System.out.print("IDS: ");
-                IDS(g, 500);
+//                System.out.print("IDS: ");
+//                IDS(g, 500);
             } catch (OutOfMemoryError e) {
                 System.out.println("memory out of bound ");
                 count--;
