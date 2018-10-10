@@ -9,7 +9,7 @@ public class SaveWesteros extends GenericSearchProblem {
     public static final int ObBSTACLE = 3;
 
     public int numDragonglassPieces;
-//    public SaveWesterosState initialState;
+//    public SaveWesterosNode initialNode;
 
     public SaveWesteros(int rows, int cols) {
         genGrid(rows, cols);
@@ -56,11 +56,11 @@ public class SaveWesteros extends GenericSearchProblem {
                 noStone = false;
             }
         } while (noStone);
-        initialState = new SaveWesterosState(grid, numDragonglassPieces, this);
+        initialNode = new SaveWesterosNode(grid, numDragonglassPieces, this);
     }
 
     public void print() {
 
-        this.initialState.print();
+        this.initialNode.print();
     }
 }

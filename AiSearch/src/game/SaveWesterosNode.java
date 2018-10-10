@@ -2,11 +2,8 @@ package game;
 
 import searchAI.Node;
 import searchAI.SearchQ;
-import searchAI.State;
 
-import java.util.ArrayList;
-
-public class SaveWesterosState extends State {
+public class SaveWesterosNode extends Node {
     private static final int MAX_SIZE = 1000000;
     // action list available (operators)
     private static final char NORTH = 'N';
@@ -38,7 +35,7 @@ public class SaveWesterosState extends State {
 
     public int col, row, dragonglass, numDragonglassPieces, map[][];
 
-    public SaveWesterosState(int[][] grid, int numDragonglassPieces, SaveWesteros s) {
+    public SaveWesterosNode(int[][] grid, int numDragonglassPieces, SaveWesteros s) {
         this.map = clone(grid);
         this.RMAX = grid.length;
         this.CMAX = grid[0].length;
@@ -72,7 +69,7 @@ public class SaveWesterosState extends State {
     }
 
 
-    public SaveWesterosState(SaveWesterosState s) {
+    public SaveWesterosNode(SaveWesterosNode s) {
 
         this.map = clone(s.map);
         this.RMAX = s.RMAX;
@@ -108,7 +105,7 @@ public class SaveWesterosState extends State {
         return true;
     }
 
-    public boolean equals(SaveWesterosState other) {
+    public boolean equals(SaveWesterosNode other) {
         for (int i = 0; i < map.length && i < other.map.length; i++) {
             for (int j = 0; j < map[i].length && i < other.map[i].length; j++) {
                 if (map[i][j] != other.map[i][j]) {
@@ -134,8 +131,8 @@ public class SaveWesterosState extends State {
         System.out.println("***********************");
     }
 
-    public SaveWesterosState kill() {
-        SaveWesterosState s = new SaveWesterosState(this);
+    public SaveWesterosNode kill() {
+        SaveWesterosNode s = new SaveWesterosNode(this);
         //        this.print();
         //        s.print();
         int num = 0;
@@ -180,8 +177,8 @@ public class SaveWesterosState extends State {
         return s;
     }
 
-    public SaveWesterosState pick() {
-        SaveWesterosState s = new SaveWesterosState(this);
+    public SaveWesterosNode pick() {
+        SaveWesterosNode s = new SaveWesterosNode(this);
         s.dragonglass = numDragonglassPieces;
         s.sequenceOfActions += PICK;
         s.cost += D_PICK;
@@ -210,30 +207,30 @@ public class SaveWesterosState extends State {
         return X_TO_E;
     }
 
-    public SaveWesterosState north()
+    public SaveWesterosNode north()
     {
-        SaveWesterosState s = new SaveWesterosState(this);
+        SaveWesterosNode s = new SaveWesterosNode(this);
         s.updatePosition(this.col, this.row - 1);
         s.sequenceOfActions += NORTH;
         return s;
     }
 
-    public SaveWesterosState south() {
-        SaveWesterosState s = new SaveWesterosState(this);
+    public SaveWesterosNode south() {
+        SaveWesterosNode s = new SaveWesterosNode(this);
         s.updatePosition(this.col, this.row + 1);
         s.sequenceOfActions += SOUTH;
         return s;
     }
 
-    public SaveWesterosState east() {
-        SaveWesterosState s = new SaveWesterosState(this);
+    public SaveWesterosNode east() {
+        SaveWesterosNode s = new SaveWesterosNode(this);
         s.updatePosition(this.col + 1, this.row);
         s.sequenceOfActions += EAST;
         return s;
     }
 
-    public SaveWesterosState west() {
-        SaveWesterosState s = new SaveWesterosState(this);
+    public SaveWesterosNode west() {
+        SaveWesterosNode s = new SaveWesterosNode(this);
         s.updatePosition(this.col - 1, this.row);
         s.sequenceOfActions += WEST;
         return s;
@@ -271,32 +268,32 @@ public class SaveWesterosState extends State {
         if (this.isWhitewalker(this.row, this.col)) {
             return q;
         } else {
-            SaveWesterosState s1 = this.north();
+            SaveWesterosNode s1 = this.north();
             if (!s1.equals(this) && !s1.isAncestor()) {
-                q.add(new Node(s1));
+                q.add(s1);
             }
-            SaveWesterosState s2 = this.south();
+            SaveWesterosNode s2 = this.south();
 
             if (!s2.equals(this) && !s2.isAncestor()) {
-                q.add(new Node(s2));
+                q.add(s2);
             }
-            SaveWesterosState s3 = this.east();
+            SaveWesterosNode s3 = this.east();
             if (!s3.equals(this) && !s3.isAncestor())
-                q.add(new Node(s3));
-            SaveWesterosState s4 = this.west();
+                q.add(s3);
+            SaveWesterosNode s4 = this.west();
             if (!s4.equals(this) && !s4.isAncestor())
-                q.add(new Node(s4));
+                q.add(s4);
             if (this.dragonglass == 0 && this.isDragonstone(this.row, this.col)) {
-                SaveWesterosState s5 = this.pick();
-                q.add(new Node(s5));
+                SaveWesterosNode s5 = this.pick();
+                q.add(s5);
             }
             if (((this.row < this.RMAX - 1 && this.isWhitewalker(this.row + 1, this.col))
                     || (this.row > 0 && this.isWhitewalker(this.row - 1, this.col))
                     || (this.col < this.CMAX - 1 && this.isWhitewalker(this.row, this.col + 1))
                     || (this.col > 0 && this.isWhitewalker(this.row, this.col - 1)))
                     && this.dragonglass > 0) {
-                SaveWesterosState s6 = this.kill();
-                q.add(new Node(s6));
+                SaveWesterosNode s6 = this.kill();
+                q.add(s6);
             }
         }
         return q;

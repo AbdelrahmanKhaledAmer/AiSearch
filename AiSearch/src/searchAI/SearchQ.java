@@ -19,27 +19,27 @@ public class SearchQ {
         which = n;
         Comparator<Node> OrderByCost = new Comparator<Node>() {
             public int compare(Node s1, Node e2) {
-                return s1.state.cost - e2.state.cost;
+                return s1.cost - e2.cost;
             }
         };
         Comparator<Node> OrderByHeuristic = new Comparator<Node>() {
             public int compare(Node s1, Node e2) {
-                return s1.state.heuristic1() - e2.state.heuristic1();
+                return s1.heuristic1() - e2.heuristic1();
             }
         };
         Comparator<Node> AStarOrder = new Comparator<Node>() {
             public int compare(Node s1, Node e2) {
-                return s1.state.heuristic1() + s1.state.cost - e2.state.heuristic1() - e2.state.cost;
+                return s1.heuristic1() + s1.cost - e2.heuristic1() - e2.cost;
             }
         };
         Comparator<Node> OrderByHeuristic2 = new Comparator<Node>() {
             public int compare(Node s1, Node e2) {
-                return s1.state.heuristic2() - e2.state.heuristic2();
+                return s1.heuristic2() - e2.heuristic2();
             }
         };
         Comparator<Node> AStarOrder2 = new Comparator<Node>() {
             public int compare(Node s1, Node e2) {
-                return s1.state.heuristic2() + s1.state.cost - e2.state.heuristic2() - e2.state.cost;
+                return s1.heuristic2() + s1.cost - e2.heuristic2() - e2.cost;
             }
         };
         switch (which) {
