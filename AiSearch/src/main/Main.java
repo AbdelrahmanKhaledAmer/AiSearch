@@ -14,7 +14,7 @@ public class Main extends PApplet
 	int jonRow;
 	int jonCol;
 	int time;
-	SaveWesterosState state;
+	SaveWesterosNode state;
 
 	boolean alt = false;
 	int kidx = -1;
@@ -53,7 +53,7 @@ public class Main extends PApplet
 
 		SaveWesteros g = new SaveWesteros(gridHeight, gridWidth);
 		g.print();
-		state = (SaveWesterosState)g.initialState;
+		state = (SaveWesterosNode)g.initialNode;
 		Node n = Search.AStar(g);
 		jonRow = gridHeight - 1;
 		jonCol = gridWidth - 1;
@@ -61,7 +61,7 @@ public class Main extends PApplet
 		{
 			System.exit(0);
 		} else {
-			actions = n.state.sequenceOfActions.toCharArray();
+			actions = n.sequenceOfActions.toCharArray();
 		}
 
 		if(gridWidth >= gridHeight)
