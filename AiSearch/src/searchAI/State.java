@@ -1,7 +1,7 @@
 package searchAI;
 
 public abstract class State {
-    public int cost;
+    public int cost,MaxDepth = 1000000;
     public String sequenceOfActions;
 
     public abstract boolean isGoal();
@@ -11,6 +11,8 @@ public abstract class State {
     public abstract int heuristic2();
 
     public abstract SearchQ expandNode(SearchQ q);
-
+    public void setMaxDepth(int n){
+        MaxDepth = n;
+    }
     public abstract void print();
 }

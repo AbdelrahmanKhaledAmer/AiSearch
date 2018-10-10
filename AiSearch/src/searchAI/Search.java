@@ -36,8 +36,23 @@ public class Search {
         }
     }
 
-    public static Node DFS(GenericSearchProblem problem) {
+    public static Node DFS(GenericSearchProblem problem, int maxDepth) {
         return generic_search(problem, 1);
+    }
+
+    public static Node IDS(GenericSearchProblem problem, int maxDepth) {
+
+        for (int i = 0; i < maxDepth; ++i) {
+            problem.initialState.setMaxDepth(i);
+            System.out.print(" At depth "+i+" ");
+            Node n = DFS(problem, maxDepth);
+            if (n != null) //generic search found a goal
+                return n;
+
+        }
+        return null;
+
+
     }
 
     public static Node BFS(GenericSearchProblem problem) {
@@ -97,20 +112,23 @@ public class Search {
             try {
                 SaveWesteros g = new SaveWesteros(4, 4);
                 g.print();
-                System.out.print("DFS: ");
-                DFS(g);
-                System.out.print("BFS: ");
-                BFS(g);
-                System.out.print("UCS: ");
-                UCS(g);
-                System.out.print("Astar: ");
-                AStar(g);
-//				System.out.print("ASTAR 2: ");
-//				AStar2(g);
-                System.out.print("Greedy: ");
-                Greedy(g);
-//				System.out.print("Greedy 2: ");
-//				Greedy2(g);
+//                System.out.print("DFS: ");
+//                DFS(g,100000);
+//                System.out.print("BFS: ");
+//                BFS(g);
+//                System.out.print("UCS: ");
+//                UCS(g);
+//                System.out.print("Astar: ");
+//                AStar(g);
+////				System.out.print("ASTAR 2: ");
+////				AStar2(g);
+//                System.out.print("Greedy: ");
+//                Greedy(g);
+////				System.out.print("Greedy 2: ");
+////				Greedy2(g);
+
+                System.out.print("IDS: ");
+                IDS(g, 500);
             } catch (OutOfMemoryError e) {
                 System.out.println("memory out of bound ");
                 count--;

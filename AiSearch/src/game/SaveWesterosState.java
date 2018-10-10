@@ -48,7 +48,7 @@ public class SaveWesterosState extends State {
         sequenceOfActions = "";
 
 
-        // initializiation of cost weights as a a power of grid sizeof the grid size
+        // initialization of cost weights as a a power of grid sizeof the grid size
         int base = Math.min(CMAX, RMAX) - 1;
         define_cost_values(base);
     }
@@ -84,6 +84,7 @@ public class SaveWesterosState extends State {
         this.cost = s.cost;
         this.numDragonglassPieces = s.numDragonglassPieces;
         define_cost_values(Math.min(s.CMAX, s.RMAX));
+        this.setMaxDepth(s.MaxDepth);
     }
 
     public int[][] clone(int[][] grid) {
@@ -207,7 +208,7 @@ public class SaveWesterosState extends State {
         return X_TO_E;
     }
 
-    public SaveWesterosState north() //TODO
+    public SaveWesterosState north()
     {
         SaveWesterosState s = new SaveWesterosState(this);
         s.updatePosition(this.col, this.row - 1);
@@ -263,6 +264,8 @@ public class SaveWesterosState extends State {
     }
 
     public SearchQ expandNode(SearchQ q) {
+        if(this.MaxDepth <= this.sequenceOfActions.length())
+            return  q;
         if (this.isWhitewalker(this.row, this.col)) {
             return q;
         } else {
