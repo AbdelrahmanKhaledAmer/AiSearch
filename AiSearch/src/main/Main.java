@@ -7,8 +7,8 @@ import processing.core.PImage;
 
 public class Main extends PApplet
 {
-	int gridWidth = 5;
-	int gridHeight = 5;
+	int gridWidth = 6;
+	int gridHeight = 6;
 	char[] actions;
 	int actIdx = 0;
 	int jonRow;
@@ -152,8 +152,11 @@ public class Main extends PApplet
 		{
 			for (float j = 0; j < gridWidth; j += 1.0f)
 			{
-				fill(255);
-				rect(j * cellLength + horizontalOffset, i * cellLength + verticalOffset, cellLength, cellLength);
+				if(!state.isObstacle((int)i, (int)j))
+				{
+					fill(255);
+					rect(j * cellLength + horizontalOffset, i * cellLength + verticalOffset, cellLength, cellLength);
+				}
 				
 				if (state.isDragonstone((int)i, (int)j))
 				{

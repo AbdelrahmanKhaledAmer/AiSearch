@@ -6,7 +6,7 @@ public class SaveWesteros extends GenericSearchProblem {
     public static final int EMPTY = 0;
     public static final int DRAGONSTONE = 1;
     public static final int WHITEWALKER = 2;
-    public static final int ObBSTACLE = 3;
+    public static final int OBSTACLE = 3;
 
     public int numDragonglassPieces;
 //    public SaveWesterosNode initialNode;
@@ -33,7 +33,7 @@ public class SaveWesteros extends GenericSearchProblem {
             int newC = (int) (Math.random() * grid[0].length);
             int newR = (int) (Math.random() * grid.length);
             if (newC != grid[0].length - 1 && newR != grid.length - 1 && grid[newR][newC] == EMPTY) {
-                grid[newR][newC] = ObBSTACLE;
+                grid[newR][newC] = OBSTACLE;
                 k++;
             }
         }

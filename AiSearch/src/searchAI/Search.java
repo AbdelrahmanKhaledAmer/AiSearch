@@ -4,19 +4,19 @@ import game.SaveWesteros;
 import game.SaveWesterosNode;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Search {
     static int numNodes;
-
     public static Node generic_search(GenericSearchProblem problem, int SearchFunction) { // SearchFunction number represents the search function to use
         //reset num of nodes
         numNodes = 0;
-        Node s = ((SaveWesteros) problem).initialNode; // initial state
+        Node s = problem.initialNode; // initial state
         SearchQ q = new SearchQ(SearchFunction);
         q.add(s);
         while (true) {
             if (q.isEmpty()) {
-                System.out.println("No solution");
+                System.out.println("No solution "+numNodes);
                 return null;
             }
 
@@ -28,7 +28,7 @@ public class Search {
             }
 
             if (current.isGoal()) {
-                System.out.println("Goal found!");
+                System.out.println("Goal found! "+numNodes);
                 System.out.println(Arrays.toString(current.sequenceOfActions.toCharArray()));
                 return current;
             }
@@ -36,7 +36,7 @@ public class Search {
         }
     }
 
-    public static Node DFS(GenericSearchProblem problem, int maxDepth) {
+    public static Node DFS(GenericSearchProblem problem) {
         return generic_search(problem, 1);
     }
 
@@ -45,7 +45,7 @@ public class Search {
         for (int i = 0; i < maxDepth; ++i) {
             problem.initialNode.setMaxDepth(i);
             System.out.print(" At depth "+i+" ");
-            Node n = DFS(problem, maxDepth);
+            Node n = DFS(problem);
             if (n != null) //generic search found a goal
                 return n;
 
@@ -106,27 +106,27 @@ public class Search {
         int max = 50;
 
         for (int i = 0; i < max; i++) {
-            System.out.println("Trial#" + i);
+            System.out.println("Trial#" + (i + 1));
             try {
-                SaveWesteros g = new SaveWesteros(4, 4);
+                SaveWesteros g = new SaveWesteros(4,4);
                 g.print();
-                System.out.print("DFS: ");
-                DFS(g,100000);
-                System.out.print("BFS: ");
-                BFS(g);
+//                System.out.print("DFS: ");
+//                DFS(g,100000);
+//                System.out.print("BFS: ");
+//                BFS(g);
                 System.out.print("UCS: ");
                 UCS(g);
                 System.out.print("Astar: ");
                 AStar(g);
-//				System.out.print("ASTAR 2: ");
-//				AStar2(g);
-                System.out.print("Greedy: ");
-                Greedy(g);
+				System.out.print("ASTAR 2: ");
+				AStar2(g);
+//                System.out.print("Greedy: ");
+//                Greedy(g);
 //				System.out.print("Greedy 2: ");
 //				Greedy2(g);
 
-                System.out.print("IDS: ");
-                IDS(g, 500);
+//                System.out.print("IDS: ");
+//                IDS(g, 20);
             } catch (OutOfMemoryError e) {
                 System.out.println("memory out of bound ");
                 count--;

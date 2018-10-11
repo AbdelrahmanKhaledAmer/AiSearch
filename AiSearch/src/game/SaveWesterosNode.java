@@ -1,5 +1,8 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import searchAI.Node;
 import searchAI.SearchQ;
 
@@ -123,7 +126,7 @@ public class SaveWesterosNode extends Node {
             for (int j = 0; j < this.map[i].length; j++) {
                 System.out.print("[" + ((this.map[i][j] == SaveWesteros.EMPTY) ? " " :
                         (this.map[i][j] == SaveWesteros.WHITEWALKER) ? "W" :
-                                (this.map[i][j] == SaveWesteros.ObBSTACLE) ? "X" : "D") + "]");
+                                (this.map[i][j] == SaveWesteros.OBSTACLE) ? "O" : "D") + "]");
             }
             System.out.println("");
         }
@@ -186,7 +189,7 @@ public class SaveWesterosNode extends Node {
     }
 
     private boolean isValid(int col, int row) {
-        return !(col >= CMAX || row >= RMAX || col < 0 || row < 0) && map[row][col] != SaveWesteros.ObBSTACLE;
+        return !(col >= CMAX || row >= RMAX || col < 0 || row < 0) && map[row][col] != SaveWesteros.OBSTACLE;
     }
 
     public void updatePosition(int col, int row) {
@@ -269,7 +272,9 @@ public class SaveWesterosNode extends Node {
             return q;
         } else {
             SaveWesterosNode s1 = this.north();
+//            System.out.println("hellowwww "+( s1.isAncestor()!=visited.contains(s1)));
             if (!s1.equals(this) && !s1.isAncestor()) {
+            	
                 q.add(s1);
             }
             SaveWesterosNode s2 = this.south();
@@ -293,6 +298,7 @@ public class SaveWesterosNode extends Node {
                     || (this.col > 0 && this.isWhitewalker(this.row, this.col - 1)))
                     && this.dragonglass > 0) {
                 SaveWesterosNode s6 = this.kill();
+                
                 q.add(s6);
             }
         }
@@ -364,137 +370,19 @@ public class SaveWesterosNode extends Node {
         if (this.isGoal()) {
             return 0;
         }
-        int possibleCost = 0;
-        int whitewalkerDistance = CMAX + RMAX + 1;
-        if (this.dragonglass == 0) {
-            int dRow = 0;
-            int dCol = 0;
-            int dragonstoneDistance = 0;
-            for (int r = 0; r < this.map.length; r++) {
-                for (int c = 0; c < this.map[r].length; c++) {
-                    if (this.isDragonstone(r, c)) {
-                        dragonstoneDistance = Math.abs(r - row) + Math.abs(c - col);
-                        dRow = r;
-                        dCol = c;
-                        break;
-                    }
-                }
-            }
-            possibleCost += (dragonstoneDistance - 1) * X_TO_E;
-            possibleCost += E_TO_D_NO_DG;
-            possibleCost += D_PICK;
-            for (int r = 0; r < this.map.length; r++) {
-                for (int c = 0; c < this.map[r].length; c++) {
-                    if (this.isWhitewalker(r, c)
-                            && (((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                            && (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1)))
-                            || (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
-                            || (c < (CMAX - 2) && this.isWhitewalker(r, c + 2)))) {
-                        int d = Math.abs(r - dRow) + Math.abs((c + 1) - dCol);
-                        if (whitewalkerDistance > d) {
-                            whitewalkerDistance = d;
-                        }
-                    } else {
-                        if (this.isWhitewalker(r, c)
-                                && ((((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                                && (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))))
-                                || (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                                || (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))
-                                || (r < (RMAX - 2) && this.isWhitewalker(r + 2, c)))) {
-                            int d = Math.abs((r + 1) - dRow) + Math.abs(c - dCol);
-                            if (whitewalkerDistance > d) {
-                                whitewalkerDistance = d;
-                            }
-                        } else {
-                            if (this.isWhitewalker(r, c)
-                                    && (((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
-                                    && (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c - 1)))
-                                    || ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1)))
-                                    || (c > 2 && this.isWhitewalker(r, c - 2)))) {
-                                int d = Math.abs(r - dRow) + Math.abs((c - 1) - dCol);
-                                if (whitewalkerDistance > d) {
-                                    whitewalkerDistance = d;
-                                }
-                            } else {
-                                if (this.isWhitewalker(r, c)
-                                        && ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
-                                        && (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
-                                        || (r > 2 && this.isWhitewalker(r - 2, c)))) {
-                                    int d = Math.abs((r - 1) - dRow) + Math.abs(c - dCol);
-                                    if (whitewalkerDistance > d) {
-                                        whitewalkerDistance = d;
-                                    }
-                                } else {
-                                    int d = Math.abs(r - dRow) + Math.abs(c - dCol);
-                                    if (whitewalkerDistance > d) {
-                                        whitewalkerDistance = d;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            possibleCost += (whitewalkerDistance - 1) * X_TO_E;
-            possibleCost += KILL3;
-        } else {
-            for (int r = 0; r < this.map.length; r++) {
-                for (int c = 0; c < this.map[r].length; c++) {
-                    if (this.isWhitewalker(r, c)
-                            && (((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                            && (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1)))
-                            || (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
-                            || (c < (CMAX - 2) && this.isWhitewalker(r, c + 2)))) {
-                        int d = Math.abs(r - row) + Math.abs((c + 1) - col);
-                        if (whitewalkerDistance > d) {
-                            whitewalkerDistance = d;
-                        }
-                    } else {
-                        if (this.isWhitewalker(r, c)
-                                && ((((r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                                && (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))))
-                                || (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c + 1))
-                                || (r < RMAX && c > 0 && this.isWhitewalker(r + 1, c - 1))
-                                || (r < (RMAX - 2) && this.isWhitewalker(r + 2, c)))) {
-                            int d = Math.abs((r + 1) - row) + Math.abs(c - col);
-                            if (whitewalkerDistance > d) {
-                                whitewalkerDistance = d;
-                            }
-                        } else {
-                            if (this.isWhitewalker(r, c)
-                                    && (((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
-                                    && (r < RMAX && c < CMAX && this.isWhitewalker(r + 1, c - 1)))
-                                    || ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1)))
-                                    || (c > 2 && this.isWhitewalker(r, c - 2)))) {
-                                int d = Math.abs(r - row) + Math.abs((c - 1) - col);
-                                if (whitewalkerDistance > d) {
-                                    whitewalkerDistance = d;
-                                }
-                            } else {
-                                if (this.isWhitewalker(r, c)
-                                        && ((r > 0 && c > 0 && this.isWhitewalker(r - 1, c - 1))
-                                        && (r > 0 && c < CMAX && this.isWhitewalker(r - 1, c + 1))
-                                        || (r > 2 && this.isWhitewalker(r - 2, c)))) {
-                                    int d = Math.abs((r - 1) - row) + Math.abs(c - col);
-                                    if (whitewalkerDistance > d) {
-                                        whitewalkerDistance = d;
-                                    }
-                                } else {
-                                    int d = Math.abs(r - row) + Math.abs(c - col);
-                                    if (whitewalkerDistance > d) {
-                                        whitewalkerDistance = d;
-                                    }
-                                }
-                            }
-                        }
+        int whitewalkerDistance = CMAX+RMAX+1;
+        for (int r = 0; r < this.map.length; r++) {
+            for (int c = 0; c < this.map[r].length; c++) {
+                if (this.isWhitewalker(r, c)) {
+                    int d = Math.abs(r - row) + Math.abs(c - col);
+                    if (whitewalkerDistance > d) {
+                        whitewalkerDistance = d;
                     }
                 }
             }
         }
-
-        possibleCost += (whitewalkerDistance - 1) * X_TO_E;
-        possibleCost += KILL3;
-        return possibleCost;
+        // Multiply whitewalkerDistance - 1 by movement cost
+        return (whitewalkerDistance - 1) * X_TO_E;
     }
 
     public boolean isEmpty(int row, int col) {
@@ -507,5 +395,9 @@ public class SaveWesterosNode extends Node {
 
     public boolean isWhitewalker(int row, int col) {
         return map[row][col] == SaveWesteros.WHITEWALKER;
+    }
+    
+    public boolean isObstacle(int row, int col) {
+    	return map[row][col] == SaveWesteros.OBSTACLE;
     }
 }
