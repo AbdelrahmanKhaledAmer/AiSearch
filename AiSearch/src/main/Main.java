@@ -1,195 +1,196 @@
 package main;
 
-import game.*;
 import searchAI.*;
-import processing.core.PApplet;
-import processing.core.PImage;
 
-public class Main extends PApplet
-{
-	int gridWidth = 6;
-	int gridHeight = 6;
-	char[] actions;
-	int actIdx = 0;
-	int jonRow;
-	int jonCol;
-	int time;
-	SaveWesterosNode state;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	boolean alt = false;
-	int kidx = -1;
-	int imgTime;
-	PImage jon1;
-	PImage jon2;
-	PImage jonk1;
-	PImage jonk2;
-	PImage jonk3;
-	PImage dragonstone;
-	PImage ww1;
-	PImage ww2;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
-	final float offset = 50.0f;
-	float horizontalOffset;
-	float verticalOffset;
-	float cellLength;
+import game.*;
+
+@SuppressWarnings("serial")
+public class Main extends JFrame implements ActionListener
+{	
+	public static final int DFS = 0;
+	public static final int BFS = 1;
+	public static final int IDS = 2;
+	public static final int UCS = 3;
+	public static final int GRD = 4;
+	public static final int AST = 5;
+	public static final int GRD2 = 6;
+	public static final int AST2 = 7;
 	
-	boolean window;
-
-	public void settings()
+	final int windowWidth = 440;
+	final int windowHeight = 200;
+	final int windowLocationX = 100;
+	final int windowLocationY = 100;
+	final int fontSize = 12;
+	
+	JButton startButton;
+	JPanel westWidth;
+	JPanel centerHeight;
+	JPanel eastVisualize;
+	JPanel topIntro;
+	JLabel widthText;
+	JLabel heightText;
+	JLabel visualizeText;
+	JLabel greetingText;
+	JTextField widthIn;
+	JTextField heigtIn;
+	JComboBox<String> visualize;
+	JComboBox<String> function;
+	
+	public Main()
 	{
-		size(650, 650);
+		super();
+		
+		// Setting the size Location, layout and other attributes of the frame.
+		setSize(windowWidth,windowHeight);
+		setLocation(windowLocationX, windowLocationY);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout());
+		setVisible(true);
+		setTitle("Introduction To Artificial Intelligence: Project 1");
+		
+		startButton = new JButton("Start");
+		startButton.setFont(new Font("Arial", Font.PLAIN, fontSize));
+		startButton.setForeground(Color.BLACK);
+		
+		widthText = new JLabel();
+		widthText.setText("Width:");
+		
+		widthIn = new JTextField();
+		widthIn.setEditable(true);
+		widthIn.setText("5");
+		widthIn.setPreferredSize(new Dimension(60, 30));
+		
+		westWidth = new JPanel();
+		westWidth.add(widthText);
+		westWidth.add(widthIn);
+		
+		heightText = new JLabel();
+		heightText.setText("Height:");
+		
+		heigtIn = new JTextField();
+		heigtIn.setEditable(true);
+		heigtIn.setText("5");
+		heigtIn.setPreferredSize(new Dimension(60, 30));
+		
+		centerHeight = new JPanel();
+		centerHeight.add(heightText);
+		centerHeight.add(heigtIn);
+		
+		visualizeText = new JLabel();
+		visualizeText.setText("Visualize?");
+		
+		String[] options = {"Yes", "No"};
+		visualize = new JComboBox<String>(options);
+		visualize.setSelectedIndex(0);
+		
+		eastVisualize = new JPanel();
+		eastVisualize.add(visualizeText);
+		eastVisualize.add(visualize);
+		
+		String[] functions = {"BFS", "DFS", "IDS", "UCS", "GRD", "AST", "GRD2", "AST2"};
+		function = new JComboBox<String>(functions);
+		function.setSelectedIndex(5);
+		
+		greetingText = new JLabel();
+		greetingText.setHorizontalAlignment(JLabel.CENTER);
+		greetingText.setVerticalAlignment(JLabel.CENTER);
+		greetingText.setText("<html><style>hh{text-align:center}</style>a<br/>Artificial Intelligence Project#1: Save Westeros!"
+				+ "<br/> Choose a function!</html>");
+		
+		topIntro = new JPanel();
+		topIntro.add(greetingText);
+		topIntro.add(function);
+		
+		add(startButton, BorderLayout.SOUTH);
+		add(westWidth, BorderLayout.WEST);
+		add(centerHeight, BorderLayout.CENTER);
+		add(eastVisualize, BorderLayout.EAST);
+		add(topIntro, BorderLayout.NORTH);
+		
+		startButton.addActionListener(this);
+
+		repaint();
+		validate();
 	}
-
-	public void setup()
-	{	
-		jon1 = loadImage("jon1.png");
-		jon2 = loadImage("jon2.png");
-		jonk1 = loadImage("jonk1.png");
-		jonk2 = loadImage("jonk2.png");
-		jonk3 = loadImage("jonk3.png");
-		dragonstone = loadImage("dragonstone.png");
-		ww1 = loadImage("ww1.png");
-		ww2 = loadImage("ww2.png");
-
-		SaveWesteros g = new SaveWesteros(gridHeight, gridWidth);
-		g.print();
-		state = (SaveWesterosNode)g.initialNode;
-		Node n = Search.AStar(g);
-		jonRow = gridHeight - 1;
-		jonCol = gridWidth - 1;
-		if(n == null)
+	
+	public static void search(GenericSearchProblem p, int searchFunction, boolean visualize)
+	{
+		p.initialNode.print();
+		if(visualize)
 		{
-			System.exit(0);
+			Visualization v = new Visualization();
+			v.setProblem(p);
+			v.setSearch(searchFunction);
+			v.initScreen();
 		} else {
-			actions = n.sequenceOfActions.toCharArray();
+			switch(searchFunction)
+			{
+			case DFS:
+				Search.DFS(p);
+				break;
+			case BFS:
+				Search.BFS(p);
+				break;
+			case IDS:
+				Search.IDS(p);
+				break;
+			case UCS:
+				Search.UCS(p);
+				break;
+			case GRD:
+				Search.Greedy(p);
+				break;
+			case AST:
+				Search.AStar(p);
+				break;
+			case GRD2:
+				Search.Greedy2(p);
+				break;
+			case AST2:
+				Search.AStar2(p);
+				break;
+			}
 		}
-
-		if(gridWidth >= gridHeight)
-		{
-			horizontalOffset = offset;
-			cellLength = ((float)width - 2 * horizontalOffset) / gridWidth;
-			verticalOffset = ((float)height - cellLength * gridHeight) / 2;
-		} else {
-			verticalOffset = offset;
-			cellLength = ((float)height - 2 * verticalOffset) / gridHeight;
-			horizontalOffset = ((float)width - cellLength * gridWidth) / 2;
-		}
-		jon1.resize((int)cellLength, (int)cellLength);
-		jon2.resize((int)cellLength, (int)cellLength);
-		jonk1.resize((int)cellLength, (int)cellLength);
-		jonk2.resize((int)cellLength, (int)cellLength);
-		jonk3.resize((int)cellLength, (int)cellLength);
-		dragonstone.resize((int)cellLength, (int)cellLength);
-		ww1.resize((int)cellLength, (int)cellLength);
-		ww2.resize((int)cellLength, (int)cellLength);
-
-		imgTime = time = millis();
-		frame.setLocation(50, 50);
 	}
-
-	public void performNextAction()
+	
+	@Override
+	public void actionPerformed(ActionEvent e)
 	{
-		if(actIdx == actions.length)
+		if(e.getSource() instanceof JButton)
 		{
-			System.out.println("Jon Did It!");
-			noLoop();
-			return;
-		}
-		char action = actions[actIdx++];
-		switch(action)
-		{
-		case 'N':
-			state = state.north();
-			jonRow--;
-			break;
-		case 'S':
-			state = state.south();
-			jonRow++;
-			break;
-		case 'E':
-			state = state.east();
-			jonCol++;
-			break;
-		case 'W':
-			state = state.west();
-			jonCol--;
-			break;
-		case 'K':
-			state = state.kill();
-			kidx = 0;
-			break;
-		case 'P':
-			state = state.pick();
-			break;
+			JButton actionTrigger = (JButton) e.getSource();
+			String buttonText = actionTrigger.getText();
+			switch (buttonText)
+			{
+			case "Start":
+				int w = Integer.parseInt(widthIn.getText());
+				int h = Integer.parseInt(heigtIn.getText());
+				boolean vis = ((String)visualize.getSelectedItem() == "Yes");
+				int func = function.getSelectedIndex();
+				GenericSearchProblem prob = new SaveWesteros(h, w);
+				search(prob, 5, vis);
+				break;
+			}
 		}
 	}
-
-	public void draw()
-	{
-		if(millis() > time + 500)
-		{
-			performNextAction();
-			time = millis();
-		}
-
-		if(millis() > imgTime + 200)
-		{
-			alt = !alt;
-			if(kidx > -1)
-			{
-				kidx++;
-			}
-			if(kidx == 3)
-			{
-				kidx = -1;
-			}
-			imgTime = millis();
-		}
-
-		background(100);
-		stroke(0);
-		for(float i = 0; i < gridHeight; i += 1.0f)
-		{
-			for (float j = 0; j < gridWidth; j += 1.0f)
-			{
-				if(!state.isObstacle((int)i, (int)j))
-				{
-					fill(255);
-					rect(j * cellLength + horizontalOffset, i * cellLength + verticalOffset, cellLength, cellLength);
-				}
-				
-				if (state.isDragonstone((int)i, (int)j))
-				{
-					image(dragonstone, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
-				} else if (state.isWhitewalker((int)i, (int)j)) {
-					if(alt)
-					{
-						image(ww1, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
-					} else {
-						image(ww2, j * cellLength + horizontalOffset, i * cellLength + verticalOffset);
-					}
-				}
-			}
-		}
-		if(kidx < 0)
-		{
-			if(alt)
-			{
-				image(jon1, jonCol * cellLength + horizontalOffset + 15.0f, jonRow * cellLength + verticalOffset);
-			} else {
-				image(jon2, jonCol * cellLength + horizontalOffset + 15.0f, jonRow * cellLength + verticalOffset);
-			}
-		} else if(kidx == 0) {
-			image(jonk1, jonCol * cellLength + horizontalOffset + 15.0f, jonRow * cellLength + verticalOffset);
-		} else if(kidx == 1) {
-			image(jonk2, jonCol * cellLength + horizontalOffset + 15.0f, jonRow * cellLength + verticalOffset);
-		} else if(kidx == 2) {
-			image(jonk3, jonCol * cellLength + horizontalOffset + 15.0f, jonRow * cellLength + verticalOffset);
-		}
-	}
-
+	
 	public static void main(String[] args)
 	{
-		PApplet.main("main.Main");
+		new Main();
 	}
 }

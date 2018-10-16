@@ -40,6 +40,19 @@ public class Search {
         return generic_search(problem, 1);
     }
 
+    public static Node IDS(GenericSearchProblem problem) {
+
+        for (int i = 0; i > -1; ++i) {
+            problem.initialNode.setMaxDepth(i);
+            System.out.print(" At depth "+i+" ");
+            Node n = DFS(problem);
+            if (n != null) //generic search found a goal
+                return n;
+
+        }
+        return null;
+    }
+    
     public static Node IDS(GenericSearchProblem problem, int maxDepth) {
 
         for (int i = 0; i < maxDepth; ++i) {
@@ -77,21 +90,23 @@ public class Search {
         return generic_search(problem, 7);
     }
 
-    public static void testGrid() {
-        SaveWesteros g = new SaveWesteros(4, 4);
-        for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++) {
-            for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++) {
+    public static void testGrid()
+    {
+        SaveWesteros g = new SaveWesteros(6, 6);
+        for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++)
+        {
+            for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++)
+            {
                 ((SaveWesterosNode) g.initialNode).map[i][j] = SaveWesteros.EMPTY;
             }
         }
-
-        ((SaveWesterosNode) g.initialNode).map[0][0] = SaveWesteros.DRAGONSTONE;
-        ((SaveWesterosNode) g.initialNode).map[1][0] = SaveWesteros.WHITEWALKER;
-        ((SaveWesterosNode) g.initialNode).map[2][0] = SaveWesteros.WHITEWALKER;
-        ((SaveWesterosNode) g.initialNode).map[1][1] = SaveWesteros.WHITEWALKER;
+        ((SaveWesterosNode) g.initialNode).map[2][0] = SaveWesteros.OBSTACLE;
+        ((SaveWesterosNode) g.initialNode).map[3][0] = SaveWesteros.OBSTACLE;
+        ((SaveWesterosNode) g.initialNode).map[4][0] = SaveWesteros.DRAGONSTONE;
         ((SaveWesterosNode) g.initialNode).map[2][1] = SaveWesteros.WHITEWALKER;
-        ((SaveWesterosNode) g.initialNode).map[1][2] = SaveWesteros.WHITEWALKER;
-        ((SaveWesterosNode) g.initialNode).map[2][2] = SaveWesteros.WHITEWALKER;
+        ((SaveWesterosNode) g.initialNode).map[3][1] = SaveWesteros.WHITEWALKER;
+        ((SaveWesterosNode) g.initialNode).map[3][2] = SaveWesteros.WHITEWALKER;
+        ((SaveWesterosNode) g.initialNode).map[2][3] = SaveWesteros.WHITEWALKER;
 
         g.print();
 
