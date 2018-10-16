@@ -101,7 +101,7 @@ public class SaveWesteros extends GenericSearchProblem
 		
 		// Set the SaveWesteros initial Node to a node with this grid-world and maximum dragonglass
 		// carrying capacity
-		initialNode = new SaveWesterosNode(grid, numDragonglassPieces, this);
+		initialNode = new SaveWesterosNode(grid, numDragonglassPieces);
 	}
 
 	/**
