@@ -78,6 +78,7 @@ public class SaveWesterosNode extends Node
 		this.sequenceOfActions = other.sequenceOfActions;
 		this.cost = other.cost;
 		this.numDragonglassPieces = other.numDragonglassPieces;
+		defineCostValues(Math.max(CMAX, RMAX));
 		this.setMaxDepth(other.MaxDepth);
 	}
 	

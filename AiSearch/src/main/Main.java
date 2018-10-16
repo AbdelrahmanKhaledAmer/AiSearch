@@ -183,7 +183,7 @@ public class Main extends JFrame implements ActionListener
 				boolean vis = ((String)visualize.getSelectedItem() == "Yes");
 				int func = function.getSelectedIndex();
 				GenericSearchProblem prob = new SaveWesteros(h, w);
-				search(prob, 5, vis);
+				search(prob, func, vis);
 				break;
 			}
 		}
@@ -192,5 +192,6 @@ public class Main extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		new Main();
+//		Search.testGrid();
 	}
 }
