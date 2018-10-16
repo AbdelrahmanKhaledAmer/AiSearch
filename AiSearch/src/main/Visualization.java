@@ -44,16 +44,26 @@ public class Visualization extends PApplet
 	static float verticalOffset;
 	static float cellLength;
 
+	/**
+	 * GUI settings
+	 */
 	public void settings()
 	{
 		size(650, 650);
 	}
 	
+	/**
+	 * Start the visualisation.
+	 */
 	public void initScreen()
 	{
 		PApplet.main("main.Visualization");
 	}
 	
+	/**
+	 * Set the problem to be sloved
+	 * @param p The problem
+	 */
 	public void setProblem(GenericSearchProblem p)
 	{
 		prob = (SaveWesteros) p;
@@ -64,6 +74,10 @@ public class Visualization extends PApplet
 		jonCol = gridWidth - 1;
 	}
 
+	/**
+	 * Set the desired search function to use.
+	 * @param searchFunction Number representing which function to use.
+	 */
 	public void setSearch(int searchFunction)
 	{
 		Node n = null;
@@ -102,6 +116,9 @@ public class Visualization extends PApplet
 		}
 	}
 
+	/**
+	 * Function called before the first frame is rendered.
+	 */
 	public void setup()
 	{	
 		jon1 = loadImage("jon1.png");
@@ -136,6 +153,10 @@ public class Visualization extends PApplet
 		frame.setLocation(50, 50);
 	}
 
+	/**
+	 * Gets the next action to perform and sets the right variables to show
+	 * it visually.
+	 */
 	public void performNextAction()
 	{
 		if(actIdx == actions.length)
@@ -175,6 +196,9 @@ public class Visualization extends PApplet
 		}
 	}
 
+	/**
+	 * Function called every frame.
+	 */
 	public void draw()
 	{
 		if(millis() > time + 500)
