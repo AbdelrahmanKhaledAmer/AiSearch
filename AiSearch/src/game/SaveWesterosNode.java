@@ -178,7 +178,7 @@ public class SaveWesterosNode extends Node
 			System.out.println("");
 		}
 		// Then print Jon's position and the number of dragonglass he has in hand.
-		System.out.println("Jon: (" + this.row + ", " + this.col + "). Dragonglass held: " + this.dragonglass);
+		System.out.println("Jon: (" + this.row + ", " + this.col + "). Dragonglass held: " + this.numDragonglassPieces);
 		System.out.println("***********************");
 	}
 
