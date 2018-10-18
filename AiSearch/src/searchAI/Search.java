@@ -214,9 +214,6 @@ public class Search
 		Greedy(g);
 		Greedy2(g);
 	}
-	public static void main (String [] args){
-		testGrid();
-	}
 	
 	public static void testGrid1()
 	{
