@@ -99,7 +99,7 @@ public class Search
 	 * Performs depth-limited search on the problem.
 	 * @param problem The problem to be solved.
 	 * @param maxDepth The maximum depth allowed.
-	 * @return Node The goal node for the problem. Null if there is no solution.
+	 * @return Node The goal node for the problem. Null if there is no solution found until depth i.
 	 */
 	public static Node IDS(GenericSearchProblem problem, int maxDepth)
 	{
@@ -178,7 +178,7 @@ public class Search
 
 	public static void testGrid()
 	{
-		SaveWesteros g = new SaveWesteros(6, 6);
+		SaveWesteros g = new SaveWesteros(5, 5);
 		for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++)
 		{
 			for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++)
@@ -193,13 +193,29 @@ public class Search
 		((SaveWesterosNode) g.initialNode).map[3][1] = SaveWesteros.WHITEWALKER;
 		((SaveWesterosNode) g.initialNode).map[3][2] = SaveWesteros.WHITEWALKER;
 		((SaveWesterosNode) g.initialNode).map[2][3] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[3][4] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[1][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[1][1] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[1][4] = SaveWesteros.OBSTACLE;
 
 		g.print();
-
+		System.out.print("DFS: ");
+		DFS(g);
+		System.out.print("IDS: ");
+		IDS(g);
+		System.out.print("BFS: ");
+		BFS(g);
+		System.out.print("UCS: ");
+		UCS(g);
 		System.out.print("Astar: ");
 		AStar(g);
+		AStar2(g);
 		System.out.print("Greedy: ");
 		Greedy(g);
+		Greedy2(g);
+	}
+	public static void main (String [] args){
+		testGrid();
 	}
 	
 	public static void testGrid1()
