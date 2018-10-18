@@ -27,7 +27,6 @@ public class SaveWesterosNode extends Node
 	// Movement Costs
 	private static int X_TO_W;
 	private static int X_TO_E;
-	private static int E_TO_D_NO_DG;
 
 	// Picking up Dragonglass cost
 	private static int D_PICK;
@@ -78,7 +77,6 @@ public class SaveWesterosNode extends Node
 		this.sequenceOfActions = other.sequenceOfActions;
 		this.cost = other.cost;
 		this.numDragonglassPieces = other.numDragonglassPieces;
-		defineCostValues(Math.max(CMAX, RMAX));
 		this.setMaxDepth(other.MaxDepth);
 	}
 	
@@ -89,15 +87,12 @@ public class SaveWesterosNode extends Node
 	public void defineCostValues(int base)
 	{
 		//cascading powers of base value
-		KILL3 = 1;
-		KILL2 = base;
-		KILL1 = base * KILL2;
-		// Picking up Dragonglass cost
-		D_PICK = base * KILL1;
-		// Movement Costs
-		X_TO_E = base * D_PICK;
-		E_TO_D_NO_DG = base * X_TO_E;
-		X_TO_W = base * E_TO_D_NO_DG;
+		KILL3  = 1;
+		KILL2  = base * base;
+		KILL1  = base * base * KILL2;
+		X_TO_E = base * KILL1;
+		D_PICK = base *X_TO_E;
+		X_TO_W = base * D_PICK;
 	}
 
 	/**
@@ -296,11 +291,6 @@ public class SaveWesterosNode extends Node
 		{
 			return X_TO_W;
 		}
-		// Cost of moving to a dragonstone without any dragonglass
-		if (dragonglass == 0 && this.isDragonstone(row, col))
-		{
-			return E_TO_D_NO_DG;
-		}
 		// Cost of moving to an empty cell
 		return X_TO_E;
 	}
@@ -483,10 +473,9 @@ public class SaveWesterosNode extends Node
 					}
 				}
 			}
-			// Multiply dragonstoneDistance - 1 by movement cost
-			possibleCost += (dragonstoneDistance - 1) * X_TO_E;
+			// Multiply dragonstoneDistance by movement cost
+			possibleCost += (dragonstoneDistance) * X_TO_E;
 			// Add dragonstone cost
-			possibleCost += E_TO_D_NO_DG;
 			possibleCost += D_PICK;
 			// Get Manhattan distance to a whitewalker
 			for (int r = 0; r < this.map.length; r++)

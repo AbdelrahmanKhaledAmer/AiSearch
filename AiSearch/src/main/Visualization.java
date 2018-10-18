@@ -24,6 +24,7 @@ public class Visualization extends PApplet
 	static int jonCol;
 	static int time;
 	static int numDG = 0;
+	static int numDGUsed = 0;
 	static SaveWesteros prob;
 	static SaveWesterosNode state;
 
@@ -72,6 +73,7 @@ public class Visualization extends PApplet
 		state = (SaveWesterosNode)prob.initialNode;
 		jonRow = gridHeight - 1;
 		jonCol = gridWidth - 1;
+		numDG = 0;
 	}
 
 	/**
@@ -84,27 +86,35 @@ public class Visualization extends PApplet
 		switch(searchFunction)
 		{
 		case DFS:
+			System.out.println("Doing DFS");
 			n = Search.DFS(prob);
 			break;
 		case BFS:
+			System.out.println("Doing BFS");
 			n = Search.BFS(prob);
 			break;
 		case IDS:
+			System.out.println("Doing IDS");
 			n = Search.IDS(prob);
 			break;
 		case UCS:
+			System.out.println("Doing UCS");
 			n = Search.UCS(prob);
 			break;
 		case GRD:
+			System.out.println("Doing GRD");
 			n = Search.Greedy(prob);
 			break;
 		case AST:
+			System.out.println("Doing AST");
 			n = Search.AStar(prob);
 			break;
 		case GRD2:
+			System.out.println("Doing GRD2");
 			n = Search.Greedy2(prob);
 			break;
 		case AST2:
+			System.out.println("Doing AST2");
 			n = Search.AStar2(prob);
 			break;
 		}
@@ -188,6 +198,7 @@ public class Visualization extends PApplet
 			state = state.kill();
 			kidx = 0;
 			numDG--;
+			numDGUsed++;
 			break;
 		case 'P':
 			state = state.pick();
@@ -222,7 +233,9 @@ public class Visualization extends PApplet
 		}
 
 		background(100);
-		text("Dragonglasses remaining: " + numDG, 10, 10);
+		textSize(14);
+		text("Dragonglasses remaining: " + numDG + "                  "
+				+ "Dragonglasses used: " + numDGUsed, 10, 30);
 		stroke(0);
 		for(float i = 0; i < gridHeight; i += 1.0f)
 		{

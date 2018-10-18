@@ -30,6 +30,26 @@ public class SaveWesteros extends GenericSearchProblem
 	{
 		genGrid(rows, cols);
 	}
+	
+	/**
+	 * Constructor for the class SaveWesteros.
+	 */
+	public SaveWesteros()
+	{
+		genGrid();
+	}
+	
+	/**
+	 * This function generates the grid for the initial node of the SaveWesteros GenericSearchProblem.
+	 * It randomly generates a number of rows and columns for the grid, and passes that number to
+	 * genGrid(rows, columns) which then generates the whitewalkers and dragonstone randomly.
+	 */
+	public void genGrid()
+	{
+		int rows = (int) (4 + Math.random() * 3);
+		int cols = (int) (4 + Math.random() * 3);
+		genGrid(rows, cols);
+	}
 
 	/**
 	 * This function generates the grid for the initial node of the SaveWesteros GenericSearchProblem.
@@ -49,7 +69,7 @@ public class SaveWesteros extends GenericSearchProblem
 		int numObstacles =  (int) (1 + Math.random() * (Math.max(rows, cols)));
 		// Generate the number of maximum dragonglass carrying capacity to some random number in
 		// between 1 and half the number of white walkers generated (minimum 1)
-		numDragonglassPieces = (int) (1 + Math.random() * numWhiteWalkers / 2);
+		numDragonglassPieces = (int) (1 + Math.random() * (double)numWhiteWalkers / 1.5);
 
 		// Make sure all cells of the grid-world are empty at first
 		for (int i = 0; i < grid.length; i++)

@@ -72,7 +72,7 @@ public class Main extends JFrame implements ActionListener
 		
 		widthIn = new JTextField();
 		widthIn.setEditable(true);
-		widthIn.setText("5");
+		widthIn.setText("RND");
 		widthIn.setPreferredSize(new Dimension(60, 30));
 		
 		westWidth = new JPanel();
@@ -84,7 +84,7 @@ public class Main extends JFrame implements ActionListener
 		
 		heigtIn = new JTextField();
 		heigtIn.setEditable(true);
-		heigtIn.setText("5");
+		heigtIn.setText("RND");
 		heigtIn.setPreferredSize(new Dimension(60, 30));
 		
 		centerHeight = new JPanel();
@@ -102,7 +102,7 @@ public class Main extends JFrame implements ActionListener
 		eastVisualize.add(visualizeText);
 		eastVisualize.add(visualize);
 		
-		String[] functions = {"BFS", "DFS", "IDS", "UCS", "GRD", "AST", "GRD2", "AST2"};
+		String[] functions = {"DFS", "BFS", "IDS", "UCS", "GRD", "AST", "GRD2", "AST2"};
 		function = new JComboBox<String>(functions);
 		function.setSelectedIndex(5);
 		
@@ -141,27 +141,35 @@ public class Main extends JFrame implements ActionListener
 			switch(searchFunction)
 			{
 			case DFS:
+				System.out.println("Doing DFS");
 				Search.DFS(p);
 				break;
 			case BFS:
+				System.out.println("Doing BFS");
 				Search.BFS(p);
 				break;
 			case IDS:
+				System.out.println("Doing IDS");
 				Search.IDS(p);
 				break;
 			case UCS:
+				System.out.println("Doing UCS");
 				Search.UCS(p);
 				break;
 			case GRD:
+				System.out.println("Doing GRD");
 				Search.Greedy(p);
 				break;
 			case AST:
+				System.out.println("Doing AST");
 				Search.AStar(p);
 				break;
 			case GRD2:
+				System.out.println("Doing GRD2");
 				Search.Greedy2(p);
 				break;
 			case AST2:
+				System.out.println("Doing AST2");
 				Search.AStar2(p);
 				break;
 			}
@@ -178,12 +186,20 @@ public class Main extends JFrame implements ActionListener
 			switch (buttonText)
 			{
 			case "Start":
-				int w = Integer.parseInt(widthIn.getText());
-				int h = Integer.parseInt(heigtIn.getText());
-				boolean vis = ((String)visualize.getSelectedItem() == "Yes");
-				int func = function.getSelectedIndex();
-				GenericSearchProblem prob = new SaveWesteros(h, w);
-				search(prob, func, vis);
+				try
+				{
+					int w = Integer.parseInt(widthIn.getText());
+					int h = Integer.parseInt(heigtIn.getText());
+					boolean vis = ((String)visualize.getSelectedItem() == "Yes");
+					int func = function.getSelectedIndex();
+					GenericSearchProblem prob = new SaveWesteros(h, w);
+					search(prob, func, vis);
+				} catch(Exception ex) {
+					boolean vis = ((String)visualize.getSelectedItem() == "Yes");
+					int func = function.getSelectedIndex();
+					GenericSearchProblem prob = new SaveWesteros();
+					search(prob, func, vis);
+				}
 				break;
 			}
 		}

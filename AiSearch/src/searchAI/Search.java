@@ -49,6 +49,7 @@ public class Search
 			if (numNodes % 1000000 == 0)
 			{
 				System.out.println("Currently at " + numNodes);
+				System.out.println("cost: " + current.cost + ". Depth: " + current.sequenceOfActions.length());
 			}
 
 			// If the node is a goal node, then return that Node as the solution.
@@ -199,5 +200,99 @@ public class Search
 		AStar(g);
 		System.out.print("Greedy: ");
 		Greedy(g);
+	}
+	
+	public static void testGrid1()
+	{
+		SaveWesteros g = new SaveWesteros(5, 6);
+		System.out.println("Max Dragon-glass = " + g .numDragonglassPieces);
+		for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++)
+		{
+			for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++)
+			{
+				((SaveWesterosNode) g.initialNode).map[i][j] = SaveWesteros.EMPTY;
+			}
+		}
+		((SaveWesterosNode) g.initialNode).map[0][0] = SaveWesteros.DRAGONSTONE;
+		((SaveWesterosNode) g.initialNode).map[0][1] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[0][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[0][3] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[0][4] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[1][2] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[1][3] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[2][3] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[2][4] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[3][0] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[3][3] = SaveWesteros.OBSTACLE;
+
+		g.print();
+
+		System.out.print("Astar: ");
+		AStar(g);
+		System.out.print("Greedy: ");
+		Greedy(g);
+	}
+	
+	public static void testGrid2()
+	{
+		SaveWesteros g = new SaveWesteros(6, 5);
+		System.out.println("Max Dragon-glass = " + g .numDragonglassPieces);
+		for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++)
+		{
+			for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++)
+			{
+				((SaveWesterosNode) g.initialNode).map[i][j] = SaveWesteros.EMPTY;
+			}
+		}
+		((SaveWesterosNode) g.initialNode).map[0][3] = SaveWesteros.DRAGONSTONE;
+		((SaveWesterosNode) g.initialNode).map[1][1] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[1][3] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[2][0] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[2][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[3][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[3][3] = SaveWesteros.WHITEWALKER;
+
+		g.print();
+
+		System.out.print("Astar: ");
+		AStar(g);
+		System.out.print("Greedy: ");
+		Greedy(g);
+	}
+	
+	public static void testGrid3()
+	{
+		SaveWesteros g = new SaveWesteros(4, 6);
+		System.out.println("Max Dragon-glass = " + g .numDragonglassPieces);
+		for (int i = 0; i < ((SaveWesterosNode) g.initialNode).map.length; i++)
+		{
+			for (int j = 0; j < ((SaveWesterosNode) g.initialNode).map[0].length; j++)
+			{
+				((SaveWesterosNode) g.initialNode).map[i][j] = SaveWesteros.EMPTY;
+			}
+		}
+		((SaveWesterosNode) g.initialNode).map[0][0] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[0][1] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[0][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[0][4] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[1][0] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[1][1] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[1][2] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[1][3] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[2][0] = SaveWesteros.WHITEWALKER;
+		((SaveWesterosNode) g.initialNode).map[2][1] = SaveWesteros.DRAGONSTONE;
+		((SaveWesterosNode) g.initialNode).map[2][2] = SaveWesteros.OBSTACLE;
+		((SaveWesterosNode) g.initialNode).map[2][4] = SaveWesteros.OBSTACLE;
+		g.print();
+
+		System.out.print("Astar: ");
+		AStar(g);
+		System.out.print("Greedy: ");
+		Greedy(g);
+	}
+	
+	public static void main(String[] args)
+	{
+		testGrid();
 	}
 }
